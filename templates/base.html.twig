@@ -15,7 +15,10 @@ Contact: hello@moussa-fofana.com
         <meta name="description" content="Découvrez nos espaces commerciaux à louer dans un centre commercial moderne. Réservez votre magasin facilement en ligne et bénéficiez d'une location flexible.">
         
         <title>{% block title %}Welcome!{% endblock %}</title>
+        
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <link rel="stylesheet" type="text/css" href="{{asset('assets/css/base.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{asset('assets/css/component-mega-menu.css')}}">
         {% block stylesheets %}
         {% endblock %}
 
@@ -23,11 +26,13 @@ Contact: hello@moussa-fofana.com
     <body>
         {{ render(controller('App\\Controller\\FrontController::header')) }}
 
-        <main>
+        <main id="MainContent" class="content-for-layout focus-none placeholder-shadow-blocks index-template" role="main" tabindex="-1">
         {% block body %}{% endblock %}
         </main>
 
         {{ render(controller('App\\Controller\\FrontController::footer')) }}
+        
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}

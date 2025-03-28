@@ -20,4 +20,9 @@ final class FrontController extends AbstractController
             'controller_name' => 'FrontController',
         ]);
     }
+
+    public function footer(): Response
+    {
+        return $this->render('front/_footer.html.twig');
+    }
 }
