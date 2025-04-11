@@ -1,0 +1,520 @@
+<section id="shopify-section-template--18316779094248__5baaa214-dc36-48c8-b807-dd5124b345c5" class="shopify-section section section-featured-collection">
+	<link href="//toytime-theme.myshopify.com/cdn/shop/t/11/assets/component-loading-overlay.css?v=77174176155476131141735791230" rel="stylesheet" type="text/css" media="all"/>
+	<link href="{{asset('assets/css/component-card.css')}}" rel="stylesheet" type="text/css" media="all"/>
+	<link href="//toytime-theme.myshopify.com/cdn/shop/t/11/assets/component-price.css?v=150523514419358740191735791230" rel="stylesheet" type="text/css" media="all"/>
+
+	<link rel="stylesheet" href="//toytime-theme.myshopify.com/cdn/shop/t/11/assets/component-slider.css?v=166414295792065203761735791230" media="print" onload="this.media='all'">
+	<link rel="stylesheet" href="//toytime-theme.myshopify.com/cdn/shop/t/11/assets/template-collection.css?v=54574615995063276591735791230" media="print" onload="this.media='all'"><link rel="stylesheet" href="//toytime-theme.myshopify.com/cdn/shop/t/11/assets/quick-add.css?v=149008844667729617101735791230" media="print" onload="this.media='all'">
+	<script src="//toytime-theme.myshopify.com/cdn/shop/t/11/assets/quick-add.js?v=152647094331144824521735791230" defer="defer"></script>
+	<script src="//toytime-theme.myshopify.com/cdn/shop/t/11/assets/product-form.js?v=26047213217427687251735791230" defer="defer"></script>
+	<style data-shopify>
+		.section-template--18316779094248__5baaa214-dc36-48c8-b807-dd5124b345c5-padding {
+			padding-top: 58px;
+			padding-bottom: 44px;
+		}
+
+		.collection .grouped-content .deal-banner.deal--template--18316779094248__5baaa214-dc36-48c8-b807-dd5124b345c5:after {
+			content: '';
+			width: 100%;
+			height: 100%;
+			z-index: -1;
+
+			background-image: url('//toytime-theme.myshopify.com/cdn/shop/files/Rectangle_6_a17bd2b3-6aa7-41b6-ab69-fa424c26901c.jpg?v=1707982081&width=880');
+
+			background-repeat: no-repeat;
+			background-size: cover;
+			position: absolute;
+			top: 0;
+			border-radius: 20px;
+		}
+
+		.collection .product-grid:not(.slider) .card-wrapper.placeholder .card {
+			display: block;
+		}
+		.collection .product-grid:not(.slider) .card-wrapper.placeholder .card__media,
+		.collection .product-grid:not(.slider) .card-wrapper.placeholder .card .media {
+			position: relative;
+		}
+		.collection .product-grid:not(.slider) .card-wrapper.placeholder .media > *:not(.zoom):not(.deferred-media__poster-button) {
+			position: relative;
+			border-radius: 20px;
+			border: 1px dashed var(--gradient-base-accent-2);
+			transition: all 0.3s linear;
+		}
+
+		.deal-banner-product-tab .placeholder .card__inner {
+			height: auto;
+		}
+		.placeholder .card__inner:not(.ratio) > .card__content {
+			display: none;
+		}
+		.card-wrapper.placeholder {
+			background: transparent;
+		}
+
+		.card-wrapper.placeholder .card__information .card__heading a {
+			font-size: calc(var(--font-heading-scale) * 2.2rem);
+		}
+
+		@media screen and (max-width: 480px) {
+			.section-template--18316779094248__5baaa214-dc36-48c8-b807-dd5124b345c5-padding {
+				padding-top: 8px;
+				padding-bottom: 22px;
+			}
+		}
+		@media screen and (min-width: 1201px) {
+			.section-template--18316779094248__5baaa214-dc36-48c8-b807-dd5124b345c5-padding {
+				padding-top: 32px;
+				padding-bottom: 88px;
+			}
+		}
+		@media screen and (min-width:1200px) and (max-width: 1439px) {
+			.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul li {
+				min-width: 80px;
+			}
+		}
+		@media screen and (min-width: 1440px) {
+			.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul li {
+				min-width: 100px;
+			}
+		}
+		.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul li span {
+			color: var(--gradient-base-accent-1) !important;
+			font-weight: 500;
+		}
+		/* .collection .swiper-pagination-progressbar.swiper-pagination-horizontal{bottom: -40px; top:unset;max-width: 1540px;margin: auto;left: 50%;transform: translateX(-50%);width: 100%;height: 3px;background: rgba(225, 225, 255, 0.1);}
+		.collection featured-swiper-slider{position: relative;}
+		.collection .swiper-pagination-progressbar .swiper-pagination-progressbar-fill{top: 0;height: 3px;background: rgba(var(--color-foreground),1);} */
+
+		.collection featured-swiper-slider .swiper-pagination {
+			width: 100%;
+			margin: 34px auto auto;
+			height: 10px;
+			background: rgba(var(--color-base-background-2));
+			opacity: 1 !important;
+			border-radius: 10px;
+		}
+		.collection featured-swiper-slider .swiper-scrollbar-drag {
+			background: rgba(var(--color-base-outline-button-labels));
+			height: 10px;
+			border-radius: 10px;
+			display: block;
+		}
+
+		@media screen and (max-width: 576px) {
+			.collection featured-swiper-slider .swiper-pagination {
+				margin-top: 20px;
+				height: 6px;
+			}
+			.collection featured-swiper-slider .swiper-scrollbar-drag {
+				height: 6px;
+			}
+		}
+
+		.collection .grouped-content {
+			display: flex;
+			justify-content: space-between;
+			gap: 40px;
+		}
+		.collection .grouped-content .deal-banner {
+			width: 50%;
+			position: relative;
+		}
+		.collection .grouped-content .grouped-content-wrapper {
+			width: 50%;
+		}
+
+
+		.collection .grouped-content .deal-banner .deal-banner__heading {
+			margin: 0;
+		}
+		.collection .grouped-content .deal-banner .deal-banner-wrapper > * {
+			text-align: center;
+			color: var(--gradient-base-accent-1);
+		}
+		.collection .grouped-content .deal-banner .deal-banner-wrapper .shop-now {
+			padding-top: 14px;
+		}
+		.collection .grouped-content .deal-banner .deal-banner-wrapper {
+			padding: 40px 90px;
+		}
+		.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 30px;
+		}
+		.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter {
+			margin-top: 30px;
+		}
+		.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul li {
+			display: block;
+			font-size: 30px;
+			line-height: normal;
+		}
+		.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul li span {
+			display: block;
+			font-size: 16px;
+			font-family: var(--font-body-family);
+		}
+
+		.collection .title-wrapper--self-padded-mobile a.button.button--primary {
+			display: none;
+		}
+
+		/* custom css */
+
+		.deal-banner-product-tab .card__inner {
+			height: 100%;
+		}
+		.collection.deal-banner-product-tab .grouped-content .deal-banner .deal-banner__heading {
+			font-size: 4.2rem;
+			text-transform: capitalize;
+			font-weight: 500;
+			letter-spacing: 0;
+		}
+		.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul li span {
+			color: var(--gradient-base-accent-1);
+		}
+		.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter {
+			margin-top: 30px;
+		}
+		.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul li {
+			font-size: 80px;
+			font-weight: 400;
+			text-transform: uppercase;
+			font-family: var(--font-heading-family);
+			position: relative;
+			line-height: 80px;
+		}
+		.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul li span {
+			display: block;
+			text-transform: capitalize;
+			color: rgba(var(--color-base-background-2), 0.6);
+			line-height: normal;
+			margin-top: 20px;
+		}
+		.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul li:not(:last-child):after {
+			content: '';
+			width: 1px;
+			height: 55px;
+			right: -42px;
+			background: currentcolor;
+			display: block;
+			position: absolute;
+			top: 15px;
+		}
+		.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul {
+			gap: 60px;
+		}
+		.deal-banner-product-tab.collection .grouped-content-wrapper .product-grid.contains-card {
+			row-gap: 40px;
+		}
+
+		.deal-banner-product-tab.collection .grouped-content .deal-banner {
+			width: 48%;
+			position: relative;
+		}
+		.deal-banner-product-tab.collection .grouped-content .grouped-content-wrapper {
+			width: 52%;
+		}
+		@media screen and (max-width: 1540px) {
+			.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul li {
+				font-size: 60px;
+				line-height: 60px;
+			}
+			.collection .grouped-content .deal-banner .deal-banner-wrapper {
+				padding: 50px 22px;
+			}
+			.collection.deal-banner-product-tab .grouped-content .deal-banner .deal-banner__heading {
+				font-size: 50px;
+			}
+			.collection .grouped-content {
+				gap: 40px;
+			}
+			.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul {
+				gap: 40px;
+			}
+			.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul li:not(:last-child):after {
+				right: -20px;
+				height: 40px;
+			}
+		}
+
+		@media screen and (max-width: 1439px) {
+			.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter {
+				margin-top: 13px;
+			}
+		}
+		@media screen and (max-width: 1199px) {
+			#shopify-section-template--17275202797800__5baaa214-dc36-48c8-b807-dd5124b345c5 .color-background-1 .page-width {
+				max-width: 100%;
+			}
+		}
+		@media screen and (max-width: 991px) {
+			.collection .grouped-content {
+				flex-direction: column;
+			}
+			.collection .grouped-content .deal-banner {
+				width: 100%;
+			}
+			.collection .grouped-content .grouped-content-wrapper {
+				width: 100%;
+			}
+			.deal-banner-product-tab.collection .grouped-content .deal-banner {
+				width: 100%;
+			}
+			.deal-banner-product-tab.collection .grouped-content .grouped-content-wrapper {
+				width: 100%;
+			}
+			.deal-banner-product-tab.collection .grouped-content-wrapper .product-grid.contains-card {
+				row-gap: var(--grid-desktop-vertical-spacing);
+			}
+			.deal-banner-product-tab .row .grouped-content .grouped-content-wrapper .slider-mobile-gutter .product-grid .grid__item {
+				width: calc(50% - var(--grid-desktop-horizontal-spacing) * 2 / 3);
+				max-width: calc(50% - var(--grid-desktop-horizontal-spacing) * 2 / 3);
+			}
+			.collection .grouped-content .deal-banner.deal--template--18316779094248__5baaa214-dc36-48c8-b807-dd5124b345c5:after {
+				background-position: center;
+			}
+		}
+
+		@media screen and (max-width: 576px) {
+			.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul {
+				gap: 30px;
+			}
+
+			.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul li {
+				font-size: 40px;
+				line-height: normal;
+			}
+			.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul li span {
+				margin: 0;
+			}
+			.collection .grouped-content .deal-banner .deal-banner-wrapper {
+				padding: 30px;
+			}
+			.collection.deal-banner-product-tab .grouped-content .deal-banner .deal-banner__heading {
+				font-size: 30px;
+			}
+			.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter {
+				margin-top: 30px;
+			}
+			.deal-banner-product-tab.collection .grouped-content .deal-banner {
+				background-color: rgb(255, 255, 255 , 0.5);
+				border-radius: 20px;
+			}
+		}
+		@media screen and (max-width: 450px) {
+			.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul li {
+				font-size: 30px;
+			}
+			.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul {
+				gap: 20px;
+			}
+			.deal-banner-product-tab.collection .grouped-content .deal-banner .deal-banner-wrapper .deals-counter .deal-clock ul li:not(:last-child):after {
+				display: none;
+			}
+
+		}
+		@media screen and (max-width: 1199px) {
+			.deal-banner-product-tab.collection .grouped-content .deal-banner {
+				background-color: rgb(255, 255, 255 , 0.5);
+				border-radius: 20px;
+			}
+		}
+		@media screen and (min-width:990px) and (max-width: 1199px) {
+			.section-featured-collection .grid--3-col-desktop .grid__item {
+				width: calc(50% - var(--grid-desktop-horizontal-spacing) * 2 / 3);
+				max-width: calc(50% - var(--grid-desktop-horizontal-spacing) * 2 / 3);
+			}
+		}
+		/* .deal-banner-product-tab .row .grouped-content .grouped-content-wrapper featured-swiper-slider .swiper .swiper-wrapper{display:flex;flex-wrap: wrap;gap:20px;}
+		.deal-banner-product-tab .row .grouped-content .grouped-content-wrapper featured-swiper-slider .swiper .swiper-wrapper .swiper-slide {flex-basis: 240px;} */
+	</style>
+	<div class="color-background-1 isolate gradient">
+		<div class="collection  page-width   deal-banner-product-tab section-template--18316779094248__5baaa214-dc36-48c8-b807-dd5124b345c5-padding">
+			<div class="row">
+				<div class="grouped-content">
+
+					<div class="deal-banner deal--template--18316779094248__5baaa214-dc36-48c8-b807-dd5124b345c5">
+						<div class="deal-banner-wrapper">
+
+							<h2 class="deal-banner__heading">
+								Special Offer
+							</h2>
+
+
+							<div class="deal-banner__text">
+								Praesent tristique magna sit amet purus gravida quis blandit.
+							</div>
+							<div class="shop-now">
+								<a href="/collections" class="button button--primary">Shop Now</a>
+							</div>
+
+
+							<div class="deals-counter">
+								<div class="deal-clock lof-clock-timer-detail4"></div>
+
+								<div class="product-deal-count" data-end-time="28 Mar 2026">
+									<div class="notice"></div>
+									<div class="deal-clock">
+										<ul>
+											<li class="days"></li>
+											<li class="hours"></li>
+											<li class="minutes"></li>
+											<li class="seconds"></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+
+					<div class="grouped-content-wrapper">
+						<div class="title-wrapper-with-link title-wrapper--self-padded-mobile title-wrapper--no-top-margin content-align--left">
+							<h2 class="title h2">
+								Top Picks for Youngsters
+							</h2>
+							<p class="description">
+								Justo eget magna fermentum iaculis.</p>
+							<a href="/collections" class="button button--primary">Shop Now</a>
+						</div>
+						<slider-component class="slider-mobile-gutter">
+							<div id="Slider-template--18316779094248__5baaa214-dc36-48c8-b807-dd5124b345c5" class="product-grid contains-card  grid grid--3-col-desktop grid--1-col-tablet-down" role="list" aria-label="Slider">
+								{% for i in 1..6 %}
+								<div id="Slide-template--18316779094248__5baaa214-dc36-48c8-b807-dd5124b345c5-1" class=" grid__item card_style-card_with_icons">
+
+									<div class="card-wrapper underline-links-hover ">
+										<div class="
+											        card
+											        card--card
+											        card--media
+											        color-background-1 gradient
+											    " style="--ratio-percent: 125.0%;">
+											<div class="card__inner  ratio" style="--ratio-percent: 125.0%;">
+												<div class="card__media">
+													<a href="/products/wooden-ponny">
+														<div class="media media--transparent media--hover-effect">
+															<img srcset="//toytime-theme.myshopify.com/cdn/shop/products/shop-1.jpg?v=1706620888 960w
+																    " src="//toytime-theme.myshopify.com/cdn/shop/products/shop-1.jpg?v=1706620888&width=360" sizes="(min-width: 1540px) 352px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" alt="Wooden Ponny" class="motion-reduce  loading-image" loading="lazy" width="960" height="960">
+
+															<img srcset="//toytime-theme.myshopify.com/cdn/shop/products/shop-5.jpg?v=1706620888 960w
+																    " src="//toytime-theme.myshopify.com/cdn/shop/products/shop-5.jpg?v=1706620888&width=360" sizes="(min-width: 1540px) 352px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" alt="Wooden Ponny" class="motion-reduce  loading-image secondary-image" loading="lazy" width="960" height="960">
+														</div>
+													</a>
+												</div>
+												<div class="card__content">
+													<div class="card__information">
+														<h3 class="card__heading">
+															<a href="/products/wooden-ponny" class="full-unstyled-link">
+																Wooden Ponny
+															</a>
+														</h3>
+													</div>
+													<div class="card__badge top-left"></div>
+												</div>
+											</div>
+											<div class="card__content for-arrow-alignment content-center  ">
+												<div class="card__information">
+													<div class="card-information new--tag"></div>
+													<div class="card-information review"></div>
+													<!-- <div class="heading-swatch"> -->
+													<h3 class="card__heading h5" id="title-template--18316779094248__5baaa214-dc36-48c8-b807-dd5124b345c5-8547308110056">
+														<a href="/products/wooden-ponny" class="full-unstyled-link">
+															Wooden Ponny
+															<span class="choosen-swatch"></span>
+														</a>
+													</h3>
+													<!-- </div> -->
+
+													<div class="price  product-price-current" data-price="Rs. 650.00">
+														<div class="price__container">
+															<div class="price__regular">
+																<span class="visually-hidden visually-hidden--inline">Regular price</span>
+																<span class="price-item price-item--regular">
+																	Rs. 650.00
+																</span>
+															</div>
+															<div class="price__sale">
+																<span class="visually-hidden visually-hidden--inline">Sale price</span>
+																<span class="price-item price-item--sale price-item--last">
+																	Rs. 650.00
+																</span>
+																<span class="visually-hidden visually-hidden--inline">Regular price</span>
+																<span>
+																	<s class="price-item price-item--regular">
+
+																		Rs. 10.35
+
+																	</s>
+																</span>
+															</div>
+															<small class="unit-price caption hidden">
+																<span class="visually-hidden">Unit price</span>
+																<span class="price-item price-item--last">
+																	<span></span>
+																	<span aria-hidden="true">/</span>
+																	<span class="visually-hidden">&nbsp;per&nbsp;</span>
+																	<span></span>
+																</span>
+															</small>
+														</div>
+													</div>
+
+													<span class="caption-large light"></span>
+
+													{# <ul class="variant-option-color">
+
+														<li class="color-values">
+															<a data-href="/products/wooden-ponny?variant=45411341566184" class="swatch swatch-element  active color bg-color-white" data-swatch-meta="name-color_white">
+																<tooltip class="tooltip">White</tooltip>
+																<span data-image="//toytime-theme.myshopify.com/cdn/shop/products/shop-1.jpg?v=1706620888&width=460" style="background-size: cover;background-color:white;background-image: url(https://toytime-theme.myshopify.com/cdn/shop/files/white_50x50.png); background-repeat: no-repeat;" data-id="45411341566184" data-variant-title-id="color" data-variant-item="white" data-variant-title="White / 3 Grams / Cotton"></span>
+															</a>
+
+														</li>
+
+														<li class="color-values">
+															<a data-href="/products/wooden-ponny?variant=45411341598952" class="swatch swatch-element  color bg-color-orange" data-swatch-meta="name-color_orange">
+																<tooltip class="tooltip">Orange</tooltip>
+																<span data-image="//toytime-theme.myshopify.com/cdn/shop/products/shop-5.jpg?v=1706620888&width=460" style="background-size: cover;background-color:orange;background-image: url(https://toytime-theme.myshopify.com/cdn/shop/files/orange_50x50.png); background-repeat: no-repeat;" data-id="45411341598952" data-variant-title-id="color" data-variant-item="orange" data-variant-title="Orange / 4 Grams / Polyester"></span>
+															</a>
+
+														</li>
+
+
+														<li class="color-values">
+															<a data-href="/products/wooden-ponny?variant=45411341631720" class="swatch swatch-element  color bg-color-red" data-swatch-meta="name-color_red">
+																<tooltip class="tooltip">Red</tooltip>
+																<span data-image="//toytime-theme.myshopify.com/cdn/shop/products/Image8_9da0f696-77fb-4be2-ae73-aaeb0cc44d31.jpg?v=1706620888&width=460" style="background-size: cover;background-color:red;background-image: url(https://toytime-theme.myshopify.com/cdn/shop/files/red_50x50.png); background-repeat: no-repeat;" data-id="45411341631720" data-variant-title-id="color" data-variant-item="red" data-variant-title="Red / 5 Grams / Fur"></span>
+															</a>
+
+														</li>
+
+
+													</ul> #}
+
+												</div>
+												<div class="card__badge top-left"></div>
+
+
+											</div>
+										</div>
+									</div>
+
+								</div>
+								{% endfor %}
+							</div>
+
+						</slider-component>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</section>
