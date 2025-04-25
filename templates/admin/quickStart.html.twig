@@ -10,7 +10,7 @@ Contact: +225 07 471 612 21
 	lang="en">
 	<!--begin::Head-->
 	<head>
-		<title>{% block title %}{% endblock %} | Espace Admin</title>
+		<title>Quick start | Espace Admin</title>
 		<meta charset="utf-8"/>
         <meta name="author" content="EMF Technologies : Moussa Fofana" />
 		<meta name="description" content="{% block description %}{% endblock %}"/>
@@ -144,7 +144,7 @@ Contact: +225 07 471 612 21
 												<!--end::List-->
 
 												<!--begin::Link-->
-												<a href="" class="btn btn-hover-rise text-white bg-white bg-opacity-10 text-uppercase fs-7 fw-bold">Go To Dashboard</a>
+												<a href="{{path('dashboard')}}" class="btn btn-hover-rise text-white bg-white bg-opacity-10 text-uppercase fs-7 fw-bold">Go To Dashboard</a>
 												<!--end::Link-->
 											</div>
 											<!--end::Wrapper-->
@@ -907,7 +907,7 @@ Contact: +225 07 471 612 21
 
 		<!--begin::Modals-->
 		<!--begin::Modal - Create Project-->
-			<div
+		<div
 			class="modal fade" id="kt_modal_create_project" tabindex="-1" aria-hidden="true"> <!--begin::Modal dialog-->
 			<div
 				class="modal-dialog modal-fullscreen p-9">
@@ -3331,9 +3331,10 @@ Contact: +225 07 471 612 21
 												<!--end::Input-->
 
 												<!--begin::Card logos-->
-													<div class="position-absolute translate-middle-y top-50 end-0 me-5"> <img src="/metronic8/demo10/assets/media/svg/card-logos/visa.svg" alt="" class="h-25px"/>
-													<img src="/metronic8/demo10/assets/media/svg/card-logos/mastercard.svg" alt="" class="h-25px"/>
-													<img src="/metronic8/demo10/assets/media/svg/card-logos/american-express.svg" alt="" class="h-25px"/>
+                                                <div class="position-absolute translate-middle-y top-50 end-0 me-5"> 
+                                                    <img src="{{asset('assets/media/svg/card-logos/visa.svg')}}" alt="" class="h-25px"/>
+                                                    <img src="{{asset('assets/media/svg/card-logos/mastercard.svg')}}" alt="" class="h-25px"/>
+                                                    <img src="{{asset('assets/media/svg/card-logos/american-express.svg')}}" alt="" class="h-25px"/>
 												</div>
 												<!--end::Card logos-->
 											</div>
@@ -3520,7 +3521,7 @@ Contact: +225 07 471 612 21
 														<h4 class="text-gray-900 fw-bold">We need your attention!</h4>
 
 														<div class="fs-6 text-gray-700 ">To start using great tools, please,
-															<a href="/metronic8/demo10/utilities/wizards/vertical.html" class="fw-bold">Create Team Platform</a>
+															<a href="" class="fw-bold">Create Team Platform</a>
 														</div>
 													</div>
 													<!--end::Content-->
@@ -3594,17 +3595,12 @@ Contact: +225 07 471 612 21
 		<!--end::Modal - Create project-->
 		<!--end::Modals-->
 
-		<!--begin::Javascript-->
-			<script>
-var hostUrl = "/metronic8/demo10/assets/";
-		</script>
-
-		<!--begin::Global Javascript Bundle(mandatory for all pages)--><script src="/metronic8/demo10/assets/plugins/global/plugins.bundle.js"> </script>
-		<script src="/metronic8/demo10/assets/js/scripts.bundle.js"></script>
+		<!--begin::Global Javascript Bundle(mandatory for all pages)--><script src="{{asset('assets/plugins/global/plugins.bundle.js')}}"> </script>
+		<script src="{{asset('assets/js/scripts.bundle.js')}}"></script>
 		<!--end::Global Javascript Bundle-->
 
 		<!--begin::Vendors Javascript(used for this page only)-->
-		<script src="/metronic8/demo10/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
+		<script src="{{asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.js')}}"></script>
 		<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
 		<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
 		<script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
@@ -3619,15 +3615,15 @@ var hostUrl = "/metronic8/demo10/assets/";
 		<!--end::Vendors Javascript-->
 
 		<!--begin::Custom Javascript(used for this page only)-->
-		<script src="/metronic8/demo10/assets/js/custom/utilities/modals/create-project/type.js"></script>
-		<script src="/metronic8/demo10/assets/js/custom/utilities/modals/create-project/budget.js"></script>
-		<script src="/metronic8/demo10/assets/js/custom/utilities/modals/create-project/settings.js"></script>
-		<script src="/metronic8/demo10/assets/js/custom/utilities/modals/create-project/team.js"></script>
-		<script src="/metronic8/demo10/assets/js/custom/utilities/modals/create-project/targets.js"></script>
-		<script src="/metronic8/demo10/assets/js/custom/utilities/modals/create-project/files.js"></script>
-		<script src="/metronic8/demo10/assets/js/custom/utilities/modals/create-project/complete.js"></script>
-		<script src="/metronic8/demo10/assets/js/custom/utilities/modals/create-project/main.js"></script>
-		<script src="/metronic8/demo10/assets/js/custom/utilities/modals/create-account.js"></script>
+		<script src="{{asset('assets/js/custom/utilities/modals/create-project/type.js')}}"></script>
+		<script src="{{asset('assets/js/custom/utilities/modals/create-project/budget.js')}}"></script>
+		<script src="{{asset('assets/js/custom/utilities/modals/create-project/settings.js')}}"></script>
+		<script src="{{asset('assets/js/custom/utilities/modals/create-project/team.js')}}"></script>
+		<script src="{{asset('assets/js/custom/utilities/modals/create-project/targets.js')}}"></script>
+		<script src="{{asset('assets/js/custom/utilities/modals/create-project/files.js')}}"></script>
+		<script src="{{asset('assets/js/custom/utilities/modals/create-project/complete.js')}}"></script>
+		<script src="{{asset('assets/js/custom/utilities/modals/create-project/main.js')}}"></script>
+		<script src="{{asset('assets/js/custom/utilities/modals/create-account.js')}}"></script>
 		<!--end::Custom Javascript-->
 		<!--end::Javascript-->
 	</body>
