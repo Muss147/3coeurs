@@ -4,6 +4,7 @@ namespace App\Controller\AdminController;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/espace-admin')]
@@ -18,8 +19,9 @@ final class QuickStartController extends AbstractController
     }
     
     #[Route('/dashboard', name: 'dashboard')]
-    public function dashboard(): Response
+    public function dashboard(SessionInterface $session): Response
     {
+        $session->set('menu', 'dashboard');
         return $this->render('admin/dashboard.html.twig');
     }
 }

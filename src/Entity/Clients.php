@@ -3,12 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\ClientsRepository;
+use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ClientsRepository::class)]
+#[ApiResource]
 class Clients
 {
     #[ORM\Id]
@@ -45,6 +47,9 @@ class Clients
      */
     #[ORM\OneToMany(targetEntity: Enfants::class, mappedBy: 'parent', orphanRemoval: true)]
     private Collection $enfants;
+
+    #[ORM\Column(length: 255)]
+    private ?string $categorie = null;
 
     public function __construct()
     {
@@ -178,6 +183,18 @@ class Clients
                 $enfant->setParent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategorie(): ?string
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(string $categorie): static
+    {
+        $this->categorie = $categorie;
 
         return $this;
     }
