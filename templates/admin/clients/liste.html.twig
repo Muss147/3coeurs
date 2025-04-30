@@ -291,7 +291,7 @@
 										</div>
 									</th>
 									<th class="min-w-125px">Client</th>
-									<th class="min-w-125px">Tééléphone</th>
+									<th class="min-w-125px">Téléphone</th>
 									<th class="min-w-125px">Catégorie</th>
 									<th class="min-w-125px">Adresse</th>
 									<th class="min-w-125px">Date</th>
@@ -503,68 +503,79 @@
 
 											<!--begin::Input-->
 											{{form_widget(form_client.nomComplet, {'attr': {'class': 'form-control form-control-solid', 'placeholder': 'Nom et Prénom'}})}}
-										<!--end::Input-->
+											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
 
+										<div
+											class="row g-9 mb-7">
+											<!--begin::Col-->
+											<div
+												class="col-md-6 fv-row">
+												<!--begin::Label-->
+												<label class="fs-6 fw-semibold mb-2">
+													<span class="required">Téléphone</span>
+
+													<span class="ms-1" data-bs-toggle="tooltip" title="Le numéro de téléphone doit être actif">
+														<i class="ki-duotone ki-information-5 text-gray-500 fs-6">
+															<span class="path1"></span>
+															<span class="path2"></span>
+															<span class="path3"></span>
+														</i>
+													</span>
+												</label>
+												<!--end::Label-->
+
+												<!--begin::Input-->
+												{{form_widget(form_client.telephone, {'attr': {'class': 'form-control form-control-solid', 'placeholder': 'Numéro de téléphone'}})}}
+												<!--end::Input-->
+											</div>
+											<!--end::Col-->
+											<!--begin::Col-->
+											<div
+												class="col-md-6 fv-row">
+												<!--begin::Label-->
+												<label class="fs-6 fw-semibold mb-2">
+													<span class="">Email</span>
+												</label>
+												<!--end::Label-->
+
+												<!--begin::Input-->
+												{{form_widget(form_client.email, {'attr': {'class': 'form-control form-control-solid', 'placeholder': 'Adresse email'}})}}
+											<!--end::Input-->
+											</div>
+											<!--end::Input group-->
+										</div>
 
 										<!--begin::Input group-->
 										<div
 											class="fv-row mb-7">
 											<!--begin::Label-->
-											<label class="fs-6 fw-semibold mb-2">
-												<span class="required">Email</span>
-
-
-												<span class="ms-1" data-bs-toggle="tooltip" title="Email address must be active">
-													<i class="ki-duotone ki-information-5 text-gray-500 fs-6">
-														<span class="path1"></span>
-														<span class="path2"></span>
-														<span class="path3"></span>
-													</i>
-												</span>
-											</label>
+											<label class="required fs-6 fw-semibold mb-2">Catégorie</label>
 											<!--end::Label-->
 
 											<!--begin::Input-->
-											<input
-											type="email" class="form-control form-control-solid" placeholder="" name="email" value="sean@dellito.com"/>
-										<!--end::Input-->
+											{{form_widget(form_client.categorie, {'attr': {'class': 'form-control form-control-solid', 'data-control': 'select2', 'data-placeholder': 'Nom et Prénom', 'data-hide-search': 'true'}})}}
+											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
 
-										<!--begin::Input group-->
-										<div
-											class="fv-row mb-15">
-											<!--begin::Label-->
-											<label class="fs-6 fw-semibold mb-2">Description</label>
-											<!--end::Label-->
-
-											<!--begin::Input-->
-											<input
-											type="text" class="form-control form-control-solid" placeholder="" name="description"/>
-										<!--end::Input-->
-										</div>
-										<!--end::Input group-->
-
-										<h3>Enfants</h3>
-										<div id="enfants-wrapper" data-prototype="{{ form_widget(form_client.enfants.vars.prototype)|e('html_attr') }}">
-											{% for enfantForm in form_client.enfants %}
-												<div class="enfant-item">
-													{{ form_row(enfantForm) }}
-													<button type="button" class="btn btn-danger remove-enfant">Supprimer cet enfant</button>
-												</div>
-											{% endfor %}
+										<div class="enfants_div">
+											<h3>Enfants</h3>
+											<div id="enfants-wrapper" data-prototype="{{ form_widget(form_client.enfants.vars.prototype)|e('html_attr') }}">
+												{% for enfantForm in form_client.enfants %}
+													<div class="enfant-item">
+														{{ form_row(enfantForm) }}
+														<button type="button" class="btn btn-danger remove-enfant">Supprimer cet enfant</button>
+													</div>
+												{% endfor %}
+											</div>
+										
+											<button type="button" id="add-enfant" class="btn btn-primary mt-2">Ajouter un enfant</button>
 										</div>
 									
-										<button type="button" id="add-enfant" class="btn btn-primary mt-2">Ajouter un enfant</button>
-									
-										<br><br>
-										<button type="submit" class="btn btn-success">Enregistrer</button>
-									
-
 										<!--begin::Billing toggle-->
-										<div class="fw-bold fs-3 rotate collapsible mb-7" data-bs-toggle="collapse" href="#kt_modal_add_customer_billing_info" role="button" aria-expanded="false" aria-controls="kt_customer_view_details">
+										<div class="fw-bold fs-3 rotate collapsible mb-7 collapsed" data-bs-toggle="collapse" href="#kt_modal_add_customer_billing_info" role="button" aria-expanded="false" aria-controls="kt_customer_view_details">
 											Information sur l'adresse
 											<span class="ms-2 rotate-180">
 												<i class="ki-duotone ki-down fs-3"></i>
@@ -574,31 +585,16 @@
 
 										<!--begin::Billing form-->
 										<div
-											id="kt_modal_add_customer_billing_info" class="collapse show">
+											id="kt_modal_add_customer_billing_info" class="collapse">
 											<!--begin::Input group-->
 											<div
 												class="d-flex flex-column mb-7 fv-row">
 												<!--begin::Label-->
-												<label class="required fs-6 fw-semibold mb-2">Adresse</label>
+												<label class="fs-6 fw-semibold mb-2">Quartier</label>
 												<!--end::Label-->
 
 												<!--begin::Input-->
-												<input
-												class="form-control form-control-solid" placeholder="" name="address1" value="101, Collins Street"/>
-											<!--end::Input-->
-											</div>
-											<!--end::Input group-->
-
-											<!--begin::Input group-->
-											<div
-												class="d-flex flex-column mb-7 fv-row">
-												<!--begin::Label-->
-												<label class="required fs-6 fw-semibold mb-2">Quartier</label>
-												<!--end::Label-->
-
-												<!--begin::Input-->
-												<input
-												class="form-control form-control-solid" placeholder="" name="city" value="Melbourne"/>
+												{{form_widget(form_client.quartier, {'attr': {'class': 'form-control form-control-solid', 'placeholder': ''}})}}
 											<!--end::Input-->
 											</div>
 											<!--end::Input group-->
@@ -610,12 +606,11 @@
 												<div
 													class="col-md-6 fv-row">
 													<!--begin::Label-->
-													<label class="required fs-6 fw-semibold mb-2">Commune</label>
+													<label class="fs-6 fw-semibold mb-2">Commune</label>
 													<!--end::Label-->
 
 													<!--begin::Input-->
-													<input
-													class="form-control form-control-solid" placeholder="" name="state" value="Victoria"/>
+													{{form_widget(form_client.commune, {'attr': {'class': 'form-control form-control-solid', 'placeholder': ''}})}}
 												<!--end::Input-->
 												</div>
 												<!--end::Col-->
@@ -624,12 +619,11 @@
 												<div
 													class="col-md-6 fv-row">
 													<!--begin::Label-->
-													<label class="required fs-6 fw-semibold mb-2">Ville</label>
+													<label class="fs-6 fw-semibold mb-2">Ville</label>
 													<!--end::Label-->
 
 													<!--begin::Input-->
-													<input
-													class="form-control form-control-solid" placeholder="" name="postcode" value="3000"/>
+													{{form_widget(form_client.ville, {'attr': {'class': 'form-control form-control-solid', 'placeholder': ''}})}}
 												<!--end::Input-->
 												</div>
 												<!--end::Col-->
@@ -637,6 +631,20 @@
 											<!--end::Input group-->
 										</div>
 										<!--end::Billing form-->
+
+										<!--begin::Input group-->
+										<div
+											class="fv-row mb-15">
+											<!--begin::Label-->
+											<label class="fs-6 fw-semibold mb-2">Description</label>
+											<!--end::Label-->
+
+											<!--begin::Input-->
+											{{form_widget(form_client.description, {'attr': {'class': 'form-control form-control-solid', 'placeholder': ''}})}}
+										<!--end::Input-->
+										</div>
+										<!--end::Input group-->
+
 									</div>
 									<!--end::Scroll-->
 								</div>

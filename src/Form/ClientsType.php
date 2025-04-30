@@ -30,10 +30,6 @@ class ClientsType extends AbstractType
                 'label' => 'Téléphone',
                 'required' => true,
             ])
-            ->add('adresse', TextType::class, [
-                'label' => 'Adresse',
-                'required' => false,
-            ])
             ->add('quartier', TextType::class, [
                 'label' => 'Quartier',
                 'required' => false,
