@@ -2,12 +2,13 @@
 
 namespace App\Form;
 
-use App\Entity\Categories;
 use App\Entity\Users;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Categories;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class CategoriesType extends AbstractType
 {
@@ -15,30 +16,26 @@ class CategoriesType extends AbstractType
     {
         $builder
             ->add('libelle')
-            ->add('slug')
-            ->add('couleur')
+            ->add('couleur', ChoiceType::class, [
+                'choices' => [
+                    'Success' => 'success',
+                    'Primary' => 'primary',
+                    'Secondary' => 'secondary',
+                    'Info' => 'info',
+                    'Warning' => 'warning',
+                    'Danger' => 'danger',
+                ],
+                'expanded' => true,
+                'multiple' => false,
+                'label' => false,
+                'choice_attr' => function ($choice, $key, $value) {
+                    return [
+                        'class' => 'btn-check',
+                        'data-kt-button' => 'true',
+                    ];
+                },
+            ])
             ->add('description')
-            ->add('createdAt', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('updatedAt', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('deletedAt', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('createdUser', EntityType::class, [
-                'class' => Users::class,
-                'choice_label' => 'id',
-            ])
-            ->add('updatedUser', EntityType::class, [
-                'class' => Users::class,
-                'choice_label' => 'id',
-            ])
-            ->add('deletedUser', EntityType::class, [
-                'class' => Users::class,
-                'choice_label' => 'id',
-            ])
         ;
     }
 

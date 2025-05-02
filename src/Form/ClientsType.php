@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\Clients;
 use App\Form\EnfantsType;
-use App\Entity\Parametres;
+use App\Entity\Categories;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -50,7 +50,7 @@ class ClientsType extends AbstractType
                 'required' => false,
             ])
             ->add('categorie', EntityType::class, [
-                'class' => Parametres::class,
+                'class' => Categories::class,
                 'choice_label' => 'libelle', // Le champ affiché
                 'label' => 'Catégorie',
                 'placeholder' => "Sélectionner une catégorie...",
