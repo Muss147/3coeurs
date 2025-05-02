@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\EnfantsRepository;
+use App\Mapping\EntityBase;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\EnfantsRepository;
 
 #[ORM\Entity(repositoryClass: EnfantsRepository::class)]
-class Enfants
+class Enfants extends EntityBase
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

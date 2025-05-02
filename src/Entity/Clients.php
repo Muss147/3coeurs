@@ -2,16 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\ClientsRepository;
-use ApiPlatform\Metadata\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
+use App\Mapping\EntityBase;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
+use ApiPlatform\Metadata\ApiResource;
+use App\Repository\ClientsRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: ClientsRepository::class)]
 #[ApiResource]
-class Clients
+class Clients extends EntityBase
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -26,9 +27,6 @@ class Clients
 
     #[ORM\Column(length: 255)]
     private ?string $telephone = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $adresse = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $quartier = null;
@@ -48,8 +46,9 @@ class Clients
     #[ORM\OneToMany(targetEntity: Enfants::class, mappedBy: 'parent', orphanRemoval: true)]
     private Collection $enfants;
 
-    #[ORM\Column(length: 255)]
-    private ?string $categorie = null;
+    #[ORM\ManyToOne(inversedBy: 'clients')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Categories $categorie = null;
 
     public function __construct()
     {
@@ -93,18 +92,6 @@ class Clients
     public function setTelephone(string $telephone): static
     {
         $this->telephone = $telephone;
-
-        return $this;
-    }
-
-    public function getAdresse(): ?string
-    {
-        return $this->adresse;
-    }
-
-    public function setAdresse(?string $adresse): static
-    {
-        $this->adresse = $adresse;
 
         return $this;
     }
@@ -187,12 +174,12 @@ class Clients
         return $this;
     }
 
-    public function getCategorie(): ?string
+    public function getCategorie(): ?Categories
     {
         return $this->categorie;
     }
 
-    public function setCategorie(string $categorie): static
+    public function setCategorie(?Categories $categorie): static
     {
         $this->categorie = $categorie;
 

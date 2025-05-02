@@ -2,16 +2,19 @@
 
 namespace App\Form;
 
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use App\Entity\Clients;
+use App\Form\EnfantsType;
+use App\Entity\Parametres;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class ClientsType extends AbstractType
 {
@@ -46,15 +49,11 @@ class ClientsType extends AbstractType
                 'label' => 'Description',
                 'required' => false,
             ])
-            ->add('categorie', ChoiceType::class, [
+            ->add('categorie', EntityType::class, [
+                'class' => Parametres::class,
+                'choice_label' => 'libelle', // Le champ affiché
                 'label' => 'Catégorie',
-                'choices' => [
-                    'Particulier' => 'particulier',
-                    'Entreprise' => 'entreprise',
-                    // Ajoute d'autres catégories si besoin
-                ],
-                'required' => true,
-                'placeholder' => 'Sélectionner une catégorie',
+                'placeholder' => "Sélectionner une catégorie...",
             ])
             ->add('enfants', CollectionType::class, [
                 'entry_type' => EnfantsType::class,
