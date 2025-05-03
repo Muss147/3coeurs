@@ -330,7 +330,7 @@
 		<!--end::Post-->
 
 		<!--begin::Modals-->
-        <!--begin::Modal - Add Parametre-->
+        <!--begin::Modal - Add Categorie-->
         <div
             class="modal fade" id="kt_modal_add_categ" tabindex="-1" aria-hidden="true"> <!--begin::Modal dialog-->
             <div
@@ -498,7 +498,8 @@
                                     <!--end::Label-->
 
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" placeholder="Entrer un libellé">
+                                    <input type="hidden" name="categ_id">
+                                    <input type="text" name="categ_libelle" class="form-control form-control-solid" placeholder="Entrer un libellé">
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -534,7 +535,7 @@
                                     <!--end::Label-->
 
                                     <!--begin::Input-->
-                                    <textarea name="description" class="form-control form-control-solid" placeholder=""></textarea>
+                                    <textarea name="categ_description" class="form-control form-control-solid" placeholder=""></textarea>
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -574,44 +575,75 @@
         <!--end::Modal - Categorie - Edit-->
 		<!--end::Modals-->
 	</div>
-{% endblock %}
+    {% endblock %}
 
-{% block scripts %}
-	<!--begin::Vendors Javascript(used for this page only)-->
-	<script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
-	<!--end::Vendors Javascript-->
-	<!--begin::Custom Javascript(used for this page only)-->
-    <script src="{{asset('assets/js/custom/apps/ecommerce/catalog/categories.js')}}"></script>
-	<script src="{{asset('assets/js/custom/apps/ecommerce/catalog/add-category.js')}}"></script>
-	<script src="{{asset('assets/js/custom/apps/ecommerce/catalog/update-category.js')}}"></script>
-	<!--end::Custom Javascript-->
-	<script type="text/javascript">
+    {% block scripts %}
+        <!--begin::Vendors Javascript(used for this page only)-->
+        <script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+        <!--end::Vendors Javascript-->
+        <!--begin::Custom Javascript(used for this page only)-->
+        <script src="{{asset('assets/js/custom/apps/ecommerce/catalog/categories.js')}}"></script>
+        <script src="{{asset('assets/js/custom/apps/ecommerce/catalog/add-category.js')}}"></script>
+        <script src="{{asset('assets/js/custom/apps/ecommerce/catalog/update-category.js')}}"></script>
+        <!--end::Custom Javascript-->
+        <script type="text/javascript">
+        const couleurs = {{ {
+            'success': 'Success',
+            'primary': 'Primary',
+            'secondary': 'Secondary',
+            'info': 'Info',
+            'warning': 'Warning',
+            'danger': 'Danger'
+        } | json_encode|raw }};
 
-		const editModal = document.getElementById('kt_modal_update_param');
+        const categories = {{ categories|map(c => {
+            id: c.id,
+            libelle: c.libelle,
+            description: c.description,
+            couleur: c.couleur
+        })|json_encode|raw }};
+
+        const editModal = document.getElementById('kt_modal_edit_categ');
+
         editModal.addEventListener('show.bs.modal', event => {
-            var param_id = event.relatedTarget.getAttribute('data-bs-param');
-            {# for devise in devises %}
-                if (param_id == "{{ devise.id }}") {
-                    editModal.querySelector('input[name=param_id]').value = "{{ devise.id }}";
-                    editModal.querySelector('input[name=param_name]').value = "{{ devise.libelle }}";
-                    editModal.querySelector('input[name=param_valeur]').value = `{{devise.valeur}}`;
-                }
-            {% endfor #}
-        })
+            const paramId = event.relatedTarget.closest('tr').querySelector('input.form-check-input').value;
+            const categorie = categories.find(c => c.id == paramId);
+            if (!categorie) return;
+
+            editModal.querySelector('input[name="categ_id"]').value = categorie.id;
+            editModal.querySelector('input[name="categ_libelle"]').value = categorie.libelle;
+            editModal.querySelector('input[name="categ_description"]').value = categorie.description;
+
+            const radioGroup = Object.entries(couleurs).map(([key, label]) => {
+                const activeClass = categorie.couleur === key ? 'active' : '';
+                const checked = categorie.couleur === key ? 'checked' : '';
+                return `
+                    <label class="btn btn-outline btn-color-muted btn-active-${key} ${activeClass}" data-kt-button="true">
+                        <input class="btn-check" type="radio" name="categorie[couleur]" value="${key}" ${checked} />
+                        ${label}
+                    </label>
+                `;
+            }).join('');
+
+            editModal.querySelector('[data-kt-buttons="true"]').innerHTML = `
+                <div class="btn-group w-100" data-kt-buttons="true" data-kt-buttons-target="[data-kt-button]">
+                    ${radioGroup}
+                </div>
+            `;
+        });
+
         {% for type, messages in app.flashes %}
             {% for message in messages %}
-                swal.fire({
-                    text: "{{ message }}",
+                Swal.fire({
+                    text: {{ message|e('js') }},
                     icon: "{{ type }}",
-                    buttonsStyling: !1,
+                    buttonsStyling: false,
                     confirmButtonText: "Ok, compris !",
                     customClass: {
                         confirmButton: "btn font-weight-bold btn-light-primary"
                     }
-                }).then(function () { 
-                    // À la suite du clique sur le bouton
-                })
+                });
             {% endfor %}
         {% endfor %}
-	</script>
+    </script>
 {% endblock %}
