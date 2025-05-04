@@ -3,7 +3,9 @@
 namespace App\Controller\AdminController;
 
 use App\Entity\Clients;
+use App\Entity\Enfants;
 use App\Form\ClientsType;
+use App\Form\EnfantsType;
 use App\Entity\Categories;
 use App\Repository\ClientsRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,12 +27,7 @@ final class ClientsController extends AbstractController
         $categories = $entityManager->getRepository(Categories::class)->findAll();
 
         $client = new Clients();
-        // Crée au moins un enfant vide à l'affichage
-        // if ($client->getEnfants()->isEmpty()) {
-        //     $client->addEnfant(new Enfants());
-        // }
-        
-        $formClient = $this->createForm(ClientsType::class, $client);
+        $formClient = $this->createForm(ClientsType::class, $client, ['form_type' => 'add']);
         $formClient->handleRequest($request);
 
         if ($formClient->isSubmitted() && $formClient->isValid()) {
@@ -62,8 +59,12 @@ final class ClientsController extends AbstractController
     {
         $session->set('menu', 'clients');
 
-        $edit_client = $this->createForm(ClientsType::class, $client);
+        $edit_client = $this->createForm(ClientsType::class, $client, ['form_type' => 'edit']);
         $edit_client->handleRequest($request);
+
+        $enfant = new Enfants();
+        $new_enfant = $this->createForm(EnfantsType::class, $enfant);
+        $new_enfant->handleRequest($request);
 
         if ($edit_client->isSubmitted() && $edit_client->isValid()) {
             dd($edit_client);
@@ -79,6 +80,7 @@ final class ClientsController extends AbstractController
         return $this->render('admin/clients/details.html.twig', [
             'client' => $client,
             'edit_client' => $edit_client,
+            'new_enfant' => $new_enfant,
         ]);
     }
 

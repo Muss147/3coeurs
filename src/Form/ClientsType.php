@@ -54,8 +54,9 @@ class ClientsType extends AbstractType
                 'choice_label' => 'libelle', // Le champ affiché
                 'label' => 'Catégorie',
                 'placeholder' => "Sélectionner une catégorie...",
-            ])
-            ->add('enfants', CollectionType::class, [
+            ]);
+            if ($options['form_type'] === 'add') {
+            $builder->add('enfants', CollectionType::class, [
                 'entry_type' => EnfantsType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
@@ -63,7 +64,8 @@ class ClientsType extends AbstractType
                 'label' => false,
                 'required' => false,
                 'prototype' => true,
-            ])
+            ]);
+            }
         ;
     }
 
@@ -71,6 +73,7 @@ class ClientsType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Clients::class,
+            'form_type' => 'add', // 'add' par défaut, peut être surchargé
         ]);
     }
 }
