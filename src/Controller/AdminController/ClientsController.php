@@ -3,7 +3,6 @@
 namespace App\Controller\AdminController;
 
 use App\Entity\Clients;
-use App\Entity\Enfants;
 use App\Form\ClientsType;
 use App\Entity\Categories;
 use App\Repository\ClientsRepository;
@@ -15,7 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/espace-admin/clients')]
+#[Route('/clients')]
 final class ClientsController extends AbstractController
 {
     #[Route('/', name: 'liste_clients')]
@@ -27,15 +26,14 @@ final class ClientsController extends AbstractController
 
         $client = new Clients();
         // Crée au moins un enfant vide à l'affichage
-        if ($client->getEnfants()->isEmpty()) {
-            $client->addEnfant(new Enfants());
-        }
+        // if ($client->getEnfants()->isEmpty()) {
+        //     $client->addEnfant(new Enfants());
+        // }
         
         $formClient = $this->createForm(ClientsType::class, $client);
         $formClient->handleRequest($request);
 
         if ($formClient->isSubmitted() && $formClient->isValid()) {
-            dd($client);
 
             // Lier chaque enfant au parent (client courant)
             foreach ($client->getEnfants() as $enfant) {
@@ -43,14 +41,14 @@ final class ClientsController extends AbstractController
                 $entityManager->persist($enfant); // si orphanRemoval et cascade persist ne sont pas utilisés
             }
 
-            // $client->updatedTimestamps();
-            // $client->updatedUserstamps($this->getUser());
+            $client->updatedTimestamps();
+            $client->updatedUserstamps($this->getUser());
 
             $entityManager->persist($client);
             $entityManager->flush();
 
             $this->addFlash('success', 'Client ajouté avec succès.');
-            return $this->redirectToRoute('clients', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('liste_clients', [], Response::HTTP_SEE_OTHER);
         }
         return $this->render('admin/clients/liste.html.twig', [
             'form_client' => $formClient,
@@ -59,17 +57,16 @@ final class ClientsController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/details', name: 'clients.detail')]
+    #[Route('/{id}/details', name: 'detail_client')]
     public function view(Request $request, Clients $client, EntityManagerInterface $entityManager, SessionInterface $session, ClientsRepository $clientsRepository): Response
     {
         $session->set('menu', 'clients');
-        $session->set('sub_menu', 'liste');
 
-        $edit_form = $this->createForm(ClientsType::class, $client);
-        $edit_form->handleRequest($request);
+        $edit_client = $this->createForm(ClientsType::class, $client);
+        $edit_client->handleRequest($request);
 
-        if ($edit_form->isSubmitted() && $edit_form->isValid()) {
-            dd($edit_form);
+        if ($edit_client->isSubmitted() && $edit_client->isValid()) {
+            dd($edit_client);
             $client->updatedTimestamps();
             $client->updatedUserstamps($this->getUser());
             
@@ -79,9 +76,9 @@ final class ClientsController extends AbstractController
             $this->addFlash('success', 'Modification de '. $client->getNom() .' effectué avec succès.');
             return $this->redirectToRoute('clients', [], Response::HTTP_SEE_OTHER);
         }
-        return $this->render('clients/view.html.twig', [
+        return $this->render('admin/clients/details.html.twig', [
             'client' => $client,
-            'edit_form' => $edit_form,
+            'edit_client' => $edit_client,
         ]);
     }
 
@@ -96,7 +93,7 @@ final class ClientsController extends AbstractController
         return $this->redirectToRoute('clients', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/liste/delete-selection', name: 'clients_delete_select', methods: ['POST'])]
+    #[Route('/delete-selection', name: 'clients_delete_select', methods: ['POST'])]
     public function delete_select(Request $request, EntityManagerInterface $entityManager, ClientsRepository $clientsRepository): Response
     {
         // Récupérer les données JSON de la requête

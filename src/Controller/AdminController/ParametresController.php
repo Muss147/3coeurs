@@ -32,12 +32,37 @@ final class ParametresController extends AbstractController
 
             $entityManager->persist($categorie);
             $entityManager->flush();
-            $this->redirectToRoute('liste_categories');
+
+            $this->addFlash('success', 'Ajout effectuée avec succès.');
+            return $this->redirectToRoute('liste_categories');
         }
         return $this->render('admin/parametres/categories.html.twig', [
             'categories' => $categories,
             'new_categ' => $formCategorie
         ]);
+    }
+
+    #[Route('/categories/edit', name: 'edit_categorie')]
+    public function editCategories(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    {
+        if ($request->isMethod('POST')) {
+            $categorie = $entityManager->getRepository(Categories::class)->find($request->get('categ_id'));
+            $libelle = $request->get('categ_libelle');
+            $couleur = $request->get('categ_couleur');
+            $description = $request->get('categ_description');
+
+            $categorie->setLibelle($libelle)
+                ->setSlug($slugger->slug(strtolower($libelle)))
+                ->setCouleur($couleur)
+                ->setDescription($description)
+                ->updatedTimestamps();
+            $categorie->updatedUserstamps($this->getUser());
+
+            $entityManager->persist($categorie);
+            $entityManager->flush();
+            $this->addFlash('success', 'Modification de <b>'. $libelle .'</b> effectuée avec succès.');
+        }
+        return $this->redirectToRoute('liste_categories');
     }
 
     #[Route('/parametres', name: 'liste_parametres')]
@@ -49,4 +74,16 @@ final class ParametresController extends AbstractController
             'parametres' => $parametres,
         ]);
     }
+
+    #[Route('/categories/{categorie}/delete', name: 'categorie_delete', methods: ['POST'])]
+    public function deleteCategorie(Request $request, Categories $categorie, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$categorie->getId(), $request->getPayload()->getString('_token'))) {
+            $categorie->remove($this->getUser());
+            $entityManager->flush();
+        }
+        $this->addFlash('success', 'Suppression effectuée avec succès.');
+        return $this->redirectToRoute('liste_categories');
+    }
+
 }
