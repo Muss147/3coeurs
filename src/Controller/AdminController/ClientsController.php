@@ -63,19 +63,48 @@ final class ClientsController extends AbstractController
         $edit_client->handleRequest($request);
 
         $enfant = new Enfants();
-        $new_enfant = $this->createForm(EnfantsType::class, $enfant);
+        $new_enfant = $this->createForm(EnfantsType::class, $enfant, ['form_view' => 'detail_client']);
         $new_enfant->handleRequest($request);
 
         if ($edit_client->isSubmitted() && $edit_client->isValid()) {
-            dd($edit_client);
+            
             $client->updatedTimestamps();
             $client->updatedUserstamps($this->getUser());
             
             $entityManager->persist($client);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Modification de '. $client->getNom() .' effectué avec succès.');
-            return $this->redirectToRoute('clients', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Modification de <b>'. $client->getNomComplet() .'</b> effectué avec succès.');
+            return $this->redirectToRoute('detail_client', ['id' => $client->getId()], Response::HTTP_SEE_OTHER);
+        }
+        elseif ($new_enfant->isSubmitted() && $new_enfant->isValid()) {
+            // Lier l'enfant au parent (client courant)
+            $enfant->setParent($client)->updatedTimestamps();
+            $enfant->updatedUserstamps($this->getUser());
+            
+            $entityManager->persist($enfant);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Ajout de l\'enfant effectué avec succès.');
+            return $this->redirectToRoute('detail_client', ['id' => $client->getId()], Response::HTTP_SEE_OTHER);
+        }
+        elseif (
+            $request->isMethod('POST') &&
+            $editEnfant = $entityManager->getRepository(Enfants::class)->find($request->get('enfant_id'))
+            ) {
+
+            $editEnfant->setNomComplet($request->get('enfant_nomComplet'))
+                ->setAge($request->get('enfant_age'))
+                ->setTaille($request->get('enfant_taille') ?? null)
+                ->setPointure($request->get('enfant_pointure') ?? null)
+                ->updatedTimestamps();
+            $editEnfant->updatedUserstamps($this->getUser());
+            
+            $entityManager->persist($editEnfant);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Modification de l\'enfant <b>'. $editEnfant->getNomComplet() .'</b> effectué avec succès.');
+            return $this->redirectToRoute('detail_client', ['id' => $client->getId()], Response::HTTP_SEE_OTHER);
         }
         return $this->render('admin/clients/details.html.twig', [
             'client' => $client,
@@ -84,8 +113,18 @@ final class ClientsController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/delete-enfant', name: 'enfant_delete', methods: ['POST'])]
+    public function deleteEnfant(Request $request, Enfants $enfant, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$enfant->getId(), $request->getPayload()->getString('_token'))) {
+            $enfant->remove($this->getUser());
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('detail_client', ['id' => $enfant->getParent()->getId()], Response::HTTP_SEE_OTHER);
+    }
+
     #[Route('/{id}/delete', name: 'clients_delete', methods: ['POST'])]
-    public function delete(Request $request, Clients $client, EntityManagerInterface $entityManager): Response
+    public function deleteClient(Request $request, Clients $client, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$client->getId(), $request->getPayload()->getString('_token'))) {
             $client->remove($this->getUser());

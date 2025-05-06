@@ -1,5 +1,10 @@
 twig:
     file_name_pattern: '*.twig'
+    paths:
+        # storage files
+        '%kernel.project_dir%/public/assets/media': media
+        # uploaded files
+        '%kernel.project_dir%/public/uploads/images': images
 
 when@test:
     twig:

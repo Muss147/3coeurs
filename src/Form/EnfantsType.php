@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class EnfantsType extends AbstractType
@@ -20,10 +21,6 @@ class EnfantsType extends AbstractType
                 'label' => false,
                 'attr' => ['placeholder' => 'Nom complet', 'class' => 'form-control mb-2 mb-md-0'],
             ])
-            ->add('age', IntegerType::class, [
-                'label' => false,
-                'attr' => ['placeholder' => 'Âge', 'class' => 'form-control mb-2 mb-md-0'],
-            ])
             ->add('taille', TextType::class, [
                 'label' => false,
                 'attr' => ['placeholder' => 'Taille', 'class' => 'form-control mb-2 mb-md-0'],
@@ -31,14 +28,23 @@ class EnfantsType extends AbstractType
             ->add('pointure', IntegerType::class, [
                 'label' => false,
                 'attr' => ['placeholder' => 'Pointure', 'class' => 'form-control mb-2 mb-md-0'],
-            ])
-        ;
+            ]);
+            if ($options['form_view'] === 'detail_client') {
+                $builder->add('age', HiddenType::class);
+            }
+            else {
+                $builder->add('age', TextType::class, [
+                    'label' => false,
+                    'attr' => ['placeholder' => 'Âge', 'class' => 'form-control mb-2 mb-md-0'],
+                ]);
+            }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Enfants::class,
+            'form_view' => 'detail_client',
         ]);
     }
 }

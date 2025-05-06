@@ -149,7 +149,9 @@ class Clients extends EntityBase
      */
     public function getEnfants(): Collection
     {
-        return $this->enfants;
+        return $this->enfants->filter(function ($enfant) {
+            return $enfant->getDeletedAt() === null;
+        });
     }
 
     public function addEnfant(Enfants $enfant): static

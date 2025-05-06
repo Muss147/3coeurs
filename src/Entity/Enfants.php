@@ -18,7 +18,7 @@ class Enfants extends EntityBase
     private ?string $nomComplet = null;
 
     #[ORM\Column]
-    private ?int $age = null;
+    private ?string $age = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $taille = null;
@@ -47,12 +47,12 @@ class Enfants extends EntityBase
         return $this;
     }
 
-    public function getAge(): ?int
+    public function getAge(): ?string
     {
         return $this->age;
     }
 
-    public function setAge(int $age): static
+    public function setAge(string $age): static
     {
         $this->age = $age;
 
