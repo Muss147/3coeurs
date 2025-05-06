@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/clients')]
+#[Route('/espace-admin/clients')]
 final class ClientsController extends AbstractController
 {
     #[Route('/', name: 'liste_clients')]

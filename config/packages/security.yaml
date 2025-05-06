@@ -16,7 +16,6 @@ security:
         main:
             lazy: true
             provider: users_in_memory
-
         admin:
             pattern: /espace-admin
             lazy: true
@@ -49,7 +48,7 @@ security:
         - { path: ^/espace-admin/login, roles: PUBLIC_ACCESS }
         - { path: ^/espace-admin/compte-desactive, roles: PUBLIC_ACCESS }
         - { path: ^/espace-admin/mot-de-passe-oublie/*, roles: PUBLIC_ACCESS }
-        - { path: ^/espace-admin, roles: [ROLE_ADMIN, ROLE_SUPER_ADMIN] }
+        - { path: ^/espace-admin/, roles: [ROLE_ADMIN, ROLE_SUPER_ADMIN] }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 
