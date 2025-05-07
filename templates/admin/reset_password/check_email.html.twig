@@ -10,7 +10,7 @@ Contact: +225 07 471 612 21
 	lang="fr">
 	<!--begin::Head-->
 	<head>
-		<title>Connexion | Espace Admin</title>
+		<title>Vérification | Espace Admin</title>
 		<meta charset="utf-8"/>
         <meta name="author" content="EMF Technologies : Moussa Fofana" />
 		<meta name="description" content=""/>
@@ -127,88 +127,42 @@ Contact: +225 07 471 612 21
 								class="d-flex flex-center flex-column flex-column-fluid pb-15 pb-lg-20">
 
 								<!--begin::Form-->
-								<form
-									class="form w-100" novalidate="novalidate" id="kt_sign_in_form" data-kt-redirect-url="" action="#" method="POST">
+								<div
+									class="w-100">
 									<!--begin::Heading-->
 									<div
 										class="text-center mb-11">
 										<!--begin::Title-->
 										<h1 class="text-gray-900 fw-bolder mb-3">
-											Connexion
+                                            Vérifiez votre adresse email
 										</h1>
 										<!--end::Title-->
 
 										<!--begin::Subtitle-->
-										<div class="text-gray-500 fw-semibold fs-6">
-											Votre espace d'administration
-										</div>
+										<div class="text-gray-500 fw-semibold fs-6 mb-8">
+                                            <span class="fw-semibold text-gray-500">
+                                            Si un compte correspondant à votre adresse e-mail existe, un e-mail contenant un lien que vous pouvez utiliser pour réinitialiser votre mot de passe vient d'être envoyé.
+                                            Ce lien expirera dans 
+                                            {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+                                            </span>
+                                        </div>
 										<!--end::Subtitle-->
+
+									    <!--begin::Actions-->
+                                        <div class="d-flex flex-wrap justify-content-center pb-lg-0">
+                                            <a href="{{ path('app_forgot_password_request') }}" class="btn btn-primary me-4">
+                                                Renvoyer le mail
+                                            </a>
+                                            <a href="{{path('quick_start')}}" class="btn btn-light">
+                                                Pas maintenant
+                                            </a>
+                                        </div>
+                                        <!--end::Actions-->
+
 									</div>
 									<!--begin::Heading-->
-
-                                    {% if error %}
-                                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                                    {% endif %}
-
-									<!--begin::Input group-->
-									<div
-										class="fv-row mb-8">
-										<!--begin::Email-->
-										<input
-										type="text" placeholder="Email" name="_username" autocomplete="off" class="form-control bg-transparent" value="{{ last_username }}"/>
-									<!--end::Email-->
-									</div>
-
-									<!--end::Input group-->
-									<div
-										class="fv-row mb-3">
-										<!--begin::Password-->
-										<input
-										type="password" placeholder="Mot de passe" name="_password" autocomplete="off" class="form-control bg-transparent"/>
-									<!--end::Password-->
-									</div>
-									<!--end::Input group-->
-
-                                    <input
-                                    type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-									<!--begin::Wrapper-->
-									<div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
-                                        <div class="form-check form-check-custom form-check-info form-check-solid form-check-sm">
-                                            <input class="form-check-input" type="checkbox" name="_remember_me" id="_remember_me">
-                                            <label class="form-check-label" for="_remember_me">Rester connecté</label>
-                                        </div>
-
-										<!--begin::Link-->
-										<a href="{{path('app_forgot_password_request')}}" class="link-primary">
-											Mot de passe oublié ?
-										</a>
-										<!--end::Link-->
-									</div>
-									<!--end::Wrapper-->
-
-									<!--begin::Submit button-->
-									<div class="d-grid mb-10">
-										<button
-											type="submit" id="kt_sign_in_submit" class="btn btn-primary">
-
-											<!--begin::Indicator label-->
-											<span class="indicator-label">
-												Se connecter</span>
-											<!--end::Indicator label-->
-
-											<!--begin::Indicator progress-->
-											<span class="indicator-progress">
-												Veuillez patienter...
-												<span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-											</span>
-											<!--end::Indicator progress-->
-										</button>
-									</div>
-									<!--end::Submit button-->
-								</form>
+								</div>
 								<!--end::Form-->
-
 							</div>
 							<!--end::Wrapper-->
 
@@ -259,10 +213,6 @@ Contact: +225 07 471 612 21
 		<script src="{{asset('assets/js/scripts.bundle.js')}}"></script>
 		<!--end::Global Javascript Bundle-->
 
-
-		<!--begin::Custom Javascript(used for this page only)-->
-		<script src="{{asset('assets/js/custom/authentication/sign-in/general.js')}}"></script>
-		<!--end::Custom Javascript-->
 		<!--end::Javascript-->
 	</body>
 	<!--end::Body-->
