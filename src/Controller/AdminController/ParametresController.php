@@ -13,6 +13,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+#[Route('/espace-admin/parametres')]
 final class ParametresController extends AbstractController
 {
     #[Route('/categories', name: 'liste_categories')]
