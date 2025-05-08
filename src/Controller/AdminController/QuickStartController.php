@@ -22,6 +22,7 @@ final class QuickStartController extends AbstractController
     public function dashboard(SessionInterface $session): Response
     {
         $session->set('menu', 'dashboard');
+        $session->set('subMenu', '');
         return $this->render('admin/dashboard.html.twig');
     }
 }

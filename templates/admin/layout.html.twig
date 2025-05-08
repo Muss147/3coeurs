@@ -109,7 +109,7 @@ Contact: +225 07 471 612 21
                                 </div>
                                 <!--end:Menu item-->
                                 <!--begin:Menu item-->
-                                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                                <div data-kt-menu-trigger="click" class="menu-item menu-accordion{% if app.session.get('menu') == 'users_manage' %} here show{% endif %}">
                                     <!--begin:Menu link-->
                                     <span class="menu-link">
                                         <span class="menu-icon">
@@ -127,7 +127,7 @@ Contact: +225 07 471 612 21
                                         <!--begin:Menu item-->
                                         <div data-kt-menu-trigger="click" class="menu-item menu-accordion mb-1">
                                             <!--begin:Menu link-->
-                                            <a href="{{path('liste_users')}}" class="menu-link">
+                                            <a href="{{path('liste_users')}}" class="menu-link{% if app.session.get('subMenu') == 'users' %} active{% endif %}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
@@ -139,7 +139,7 @@ Contact: +225 07 471 612 21
                                         <!--begin:Menu item-->
                                         <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                                             <!--begin:Menu link-->
-                                            <a href="" class="menu-link">
+                                            <a href="" class="menu-link{% if app.session.get('subMenu') == 'roles' %} active{% endif %}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
@@ -151,7 +151,7 @@ Contact: +225 07 471 612 21
                                         <!--begin:Menu item-->
                                         <div class="menu-item">
                                             <!--begin:Menu link-->
-                                            <a class="menu-link" href="">
+                                            <a class="menu-link{% if app.session.get('subMenu') == 'permissions' %} active{% endif %}" href="{{path('permissions')}}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
@@ -441,7 +441,7 @@ Contact: +225 07 471 612 21
 												<span class="path2"></span>
 											</i>
 										</span>
-										<span class="menu-title">Patamètres</span>
+										<span class="menu-title">Paramètres</span>
 										<span class="menu-arrow"></span>
 									</span>
                                     <!--end:Menu link-->
@@ -489,11 +489,11 @@ Contact: +225 07 471 612 21
 								<div
 									class="ms-2">
 									<!--begin::Name-->
-									<a href="#" class="text-gray-800 text-hover-primary fs-6 fw-bold lh-1">Paul Melone</a>
+									<a href="#" class="text-gray-800 text-hover-primary fs-6 fw-bold lh-1">{{app.user.nomComplet}}</a>
 									<!--end::Name-->
 
 									<!--begin::Major-->
-									<span class="text-muted fw-semibold d-block fs-7 lh-1">Python Dev</span>
+									{# <span class="text-muted fw-semibold d-block fs-7 lh-1">{{app.user.role.libelle}}</span> #}
 									<!--end::Major-->
 								</div>
 								<!--end::User info-->
@@ -525,12 +525,12 @@ Contact: +225 07 471 612 21
 											<!--begin::Username-->
 											<div class="d-flex flex-column">
 												<div class="fw-bold d-flex align-items-center fs-5">
-													Max Smith
+													{{app.user.nomComplet}}
 													<span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">Pro</span>
 												</div>
 
 												<a href="#" class="fw-semibold text-muted text-hover-primary fs-7">
-													max@kt.com
+													{{app.user.email}}
 												</a>
 											</div>
 											<!--end::Username-->
@@ -583,22 +583,6 @@ Contact: +225 07 471 612 21
 												</span>
 											</span>
 										</a>
-
-										<!--begin::Menu sub-->
-										<div
-											class="menu-sub menu-sub-dropdown w-175px py-4">
-											<!--begin::Menu item-->
-											<div class="menu-item px-3">
-												<a href="" class="menu-link d-flex px-5">
-													<span class="symbol symbol-20px me-4">
-														<img class="rounded-1" src="{{asset('assets/media/flags/france.svg')}}" alt=""/>
-													</span>
-													Français
-												</a>
-											</div>
-											<!--end::Menu item-->
-										</div>
-										<!--end::Menu sub-->
 									</div>
 									<!--end::Menu item-->
 
@@ -612,7 +596,7 @@ Contact: +225 07 471 612 21
 
 									<!--begin::Menu item-->
 									<div class="menu-item px-5">
-										<a href="" class="menu-link px-5">
+										<a href="{{path('admin_logout')}}" class="menu-link px-5">
 											Déconnexion
 										</a>
 									</div>

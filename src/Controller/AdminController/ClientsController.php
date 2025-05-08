@@ -23,6 +23,7 @@ final class ClientsController extends AbstractController
     public function index(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         $session->set('menu', 'clients');
+        $session->set('subMenu', '');
         $clients = $entityManager->getRepository(Clients::class)->findAll();
         $categories = $entityManager->getRepository(Categories::class)->findAll();
 
@@ -58,6 +59,7 @@ final class ClientsController extends AbstractController
     public function view(Request $request, Clients $client, EntityManagerInterface $entityManager, SessionInterface $session, ClientsRepository $clientsRepository): Response
     {
         $session->set('menu', 'clients');
+        $session->set('subMenu', '');
 
         $edit_client = $this->createForm(ClientsType::class, $client, ['form_type' => 'edit']);
         $edit_client->handleRequest($request);

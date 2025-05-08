@@ -44,7 +44,8 @@ final class UsersController extends AbstractController
     #[Route('/', name: 'liste_users')]
     public function list(Request $request, UsersRepository $usersRepository, RolesRepository $RolesRepository, SessionInterface $session): Response
     {
-        $session->set('menu', 'users');
+        $session->set('menu', 'users_manage');
+        $session->set('subMenu', 'users');
         
         $user = new Users();
         $form = $this->createForm(UsersType::class, $user, ['form_type' => 'add']);

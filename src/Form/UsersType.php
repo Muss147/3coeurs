@@ -29,6 +29,9 @@ class UsersType extends AbstractType
                 ->add('email', EmailType::class, [
                     'label' => false,
                 ])
+                ->add('telephone', TextType::class, [
+                    'label' => false,
+                ])
                 ->add('role', EntityType::class, [
                     'class' => Roles::class,
                     'choice_label' => 'libelle',

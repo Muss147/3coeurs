@@ -35,7 +35,7 @@ class Permissions extends EntityBase
     /**
      * @var Collection<int, Actions>
      */
-    #[ORM\OneToMany(targetEntity: Actions::class, mappedBy: 'permission', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Actions::class, mappedBy: 'permission', orphanRemoval: true, cascade: ['persist'])]
     private Collection $actions;
 
     public function __construct()
@@ -71,6 +71,16 @@ class Permissions extends EntityBase
         $this->slug = $slug;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function generateSlug(): void
+    {
+        if ($this->libelle) {
+            // Slugify en français avec un slugger injecté plus tard dans un service ou EventSubscriber
+            $this->slug = strtolower(trim(preg_replace('/[^a-z0-9]+/', '-', $this->libelle), '-'));
+        }
     }
 
     public function isCore(): ?bool

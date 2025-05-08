@@ -19,7 +19,8 @@ final class ParametresController extends AbstractController
     #[Route('/categories', name: 'liste_categories')]
     public function categories(Request $request, EntityManagerInterface $entityManager, SessionInterface $session, SluggerInterface $slugger): Response
     {
-        $session->set('menu', 'categories');
+        $session->set('menu', 'parametres');
+        $session->set('subMenu', 'categories');
         $categories = $entityManager->getRepository(Categories::class)->findAll();
 
         $categorie = new Categories();
@@ -70,6 +71,7 @@ final class ParametresController extends AbstractController
     public function parametres(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         $session->set('menu', 'parametres');
+        $session->set('subMenu', '');
         $parametres = $entityManager->getRepository(Parametres::class)->findAll();
         return $this->render('admin/parametres/index.html.twig', [
             'parametres' => $parametres,
