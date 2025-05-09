@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Repository\ActionsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ActionsRepository;
 
 #[ORM\Entity(repositoryClass: ActionsRepository::class)]
 class Actions

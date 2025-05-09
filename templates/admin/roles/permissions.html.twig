@@ -259,13 +259,13 @@
 								<tr>
 									<td>{{permission.libelle}}</td>
 									<td>
-										{# {% for role in permission.roles %}<a href="" class="badge badge-light-primary fs-7 m-1">{{role.libelle}}</a>{% endfor %} #}
+										{% for autoris in permission.autorisations %}<a href="" class="badge badge-light-primary fs-7 m-1">{{autoris.role.libelle}}</a>{% endfor %}
 									</td>
 									<td>
 										24 Jun 2025, 8:43 pm
 									</td>
 									<td class="text-end">
-										<button class="btn btn-icon btn-active-light-primary w-30px h-30px me-3" data-bs-toggle="modal" data-bs-target="#kt_modal_update_permission">
+										<button class="btn btn-icon btn-active-light-primary w-30px h-30px me-3" data-bs-toggle="modal" data-bs-target="#kt_modal_update_permission" data-bs-ident="{{permission.id}}">
 											<i class="ki-duotone ki-setting-3 fs-3">
 												<span class="path1"></span>
 												<span class="path2"></span>
@@ -274,15 +274,18 @@
 												<span class="path5"></span>
 											</i>
 										</button>
-										<button class="btn btn-icon btn-active-light-primary w-30px h-30px" data-kt-permissions-table-filter="delete_row">
-											<i class="ki-duotone ki-trash fs-3">
-												<span class="path1"></span>
-												<span class="path2"></span>
-												<span class="path3"></span>
-												<span class="path4"></span>
-												<span class="path5"></span>
-											</i>
-										</button>
+										<form class="d-inline" method="post" action="{{ path('permission_delete', {'id': permission.id}) }}">
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ permission.id) }}">
+											<button class="btn btn-icon btn-active-light-primary w-30px h-30px" data-kt-permissions-table-filter="delete_row">
+												<i class="ki-duotone ki-trash fs-3">
+													<span class="path1"></span>
+													<span class="path2"></span>
+													<span class="path3"></span>
+													<span class="path4"></span>
+													<span class="path5"></span>
+												</i>
+											</button>
+										</form>
 									</td>
 								</tr>
                                 {% endfor %}
@@ -333,7 +336,7 @@
 										<label class="fs-6 fw-semibold form-label mb-2">
 											<span class="required">Permission</span>
 
-											<span class="ms-2" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true" data-bs-content="Permission names is required to be unique.">
+											<span class="ms-2" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true" data-bs-content="Les noms des permissions doivent être uniques.">
 												<i class="ki-duotone ki-information fs-7">
 													<span class="path1"></span>
 													<span class="path2"></span>
@@ -351,7 +354,7 @@
 
                                     {# 1. Génère le prototype avec échappement propre #}
                                     {% set prototype %}
-                                    <div class='action-item form-group row mb-5'>
+                                    <div class='action-item form-group row mb-3'>
                                         <div class='col-md-8'>
                                             <label class='form-label'>Action :</label>
                                             {{ form_widget(new_permission.actions.vars.prototype.libelle, {'attr': {'class': 'form-control mb-2 mb-md-0', 'placeholder': 'Libellé'}}) }}
@@ -440,7 +443,7 @@
 							<div
 								class="modal-header">
 								<!--begin::Modal title-->
-								<h2 class="fw-bold">Update Permission</h2>
+								<h2 class="fw-bold">Modification de Permission</h2>
 								<!--end::Modal title-->
 
 								<!--begin::Close-->
@@ -459,7 +462,7 @@
 								<!--begin::Notice-->
 
 								<!--begin::Notice-->
-									<div
+								<div
 									class="notice d-flex bg-light-warning rounded border-warning border border-dashed mb-9 p-6"> <!--begin::Icon-->
 									<i class="ki-duotone ki-information fs-2tx text-warning me-4">
 										<span class="path1"></span>
@@ -475,8 +478,8 @@
 										<div class=" fw-semibold">
 
 											<div class="fs-6 text-gray-700 ">
-												<strong class="me-1">Warning!</strong>
-												By editing the permission name, you might break the system permissions functionality. Please ensure you're absolutely certain before proceeding.</div>
+												<strong class="me-1">Attention !</strong>
+												En modifiant le nom de l'autorisation, vous risquez d'interrompre la fonctionnalité des autorisations du système. Veuillez vous assurer que vous êtes absolument certain avant de procéder.</div>
 										</div>
 										<!--end::Content-->
 
@@ -487,15 +490,15 @@
 								<!--end::Notice-->
 
 								<!--begin::Form-->
-									<form
-									id="kt_modal_update_permission_form" class="form" action="#"> <!--begin::Input group-->
+								<form
+									id="kt_modal_update_permission_form" class="form" action="{{path('edit_permissions')}}" method="POST"> <!--begin::Input group-->
 									<div
 										class="fv-row mb-7">
 										<!--begin::Label-->
 										<label class="fs-6 fw-semibold form-label mb-2">
-											<span class="required">Permission Name</span>
+											<span class="required">Permission</span>
 
-											<span class="ms-2" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true" data-bs-content="Permission names is required to be unique.">
+											<span class="ms-2" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true" data-bs-content="Les noms des permissions doivent être uniques.">
 												<i class="ki-duotone ki-information fs-7">
 													<span class="path1"></span>
 													<span class="path2"></span>
@@ -507,23 +510,60 @@
 
 										<!--begin::Input-->
 										<input
-										class="form-control form-control-solid" placeholder="Enter a permission name" name="permission_name"/>
+										class="form-control form-control-solid" placeholder="Entrer le libellé de la permission" name="permission_libelle"/>
+										<input type="hidden" name="permission_id">
 									<!--end::Input-->
 									</div>
 									<!--end::Input group-->
 
+									<!--begin::Repeater-->
+									<div id="kt_docs_repeater_actions">
+										<!--begin::Form group-->
+										<div class="form-group">
+											<div data-repeater-list="actions">
+												<div data-repeater-item>
+													<div class="form-group row mb-3">
+														<div class="col-md-8">
+															<label class="form-label">Action :</label>
+															<input type="hidden" name="actions[][id]">
+															<input type="text" name="actions[][libelle]" class="form-control mb-2 mb-md-0" placeholder="Libellé" />
+														</div>
+														<div class="col-md-4">
+															<a href="javascript:;" data-repeater-delete class="btn btn-sm btn-light-danger w-100 mt-3 mt-md-8">
+																<i class="ki-duotone ki-trash fs-5"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
+																Supprimer
+															</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!--end::Form group-->
+
+										<!--begin::Form group-->
+										<div class="form-group mt-5">
+											<a href="javascript:;" data-repeater-create class="btn btn-light-primary">
+												<i class="ki-duotone ki-plus fs-3"></i>
+												Ajouter une action
+											</a>
+										</div>
+										<!--end::Form group-->
+									</div>
+									<!--end::Repeater-->
+
+
 									<!--begin::Actions-->
 									<div class="text-center pt-15">
 										<button type="reset" class="btn btn-light me-3" data-kt-permissions-modal-action="cancel">
-											Discard
+											Annuler
 										</button>
 
 										<button type="submit" class="btn btn-primary" data-kt-permissions-modal-action="submit">
 											<span class="indicator-label">
-												Submit
+												Soumettre
 											</span>
 											<span class="indicator-progress">
-												Please wait...
+												Veuillez patienter...
 												<span class="spinner-border spinner-border-sm align-middle ms-2"></span>
 											</span>
 										</button>
@@ -547,6 +587,8 @@
 
 {% block scripts %}
 <script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+<script src="{{asset('assets/plugins/custom/formrepeater/formrepeater.bundle.js')}}"></script>
+
 
 <script src="{{asset('assets/js/custom/apps/user-management/permissions/list.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/permissions/add-permission.js')}}"></script>
@@ -573,6 +615,52 @@
             }
         });
     });
+
+	const permissions = {{ permissions|map(p => {
+		id: p.id,
+		libelle: p.libelle,
+		actions: p.actions|map(action => {
+			id: action.id,
+			libelle: action.libelle
+        })
+	})|json_encode|raw }};
+
+	const editModal = document.getElementById('kt_modal_update_permission');
+	const $repeater = $('#kt_docs_repeater_actions');
+
+	// Initialiser le repeater UNE SEULE FOIS
+	$repeater.repeater({
+		initEmpty: true,
+		defaultValues: {},
+		show: function () {
+			$(this).slideDown();
+		},
+		hide: function (deleteElement) {
+			$(this).slideUp(deleteElement);
+		}
+	});
+
+	editModal.addEventListener('show.bs.modal', event => {
+		const paramId = event.relatedTarget.attributes['data-bs-ident'].value;
+		const permission = permissions.find(c => c.id == paramId);
+		if (!permission) return;
+
+		editModal.querySelector('input[name="permission_id"]').value = permission.id;
+		editModal.querySelector('input[name="permission_libelle"]').value = permission.libelle;
+
+		// Réinitialiser le repeater
+		const repeaterList = $repeater.find('[data-repeater-list]');
+		repeaterList.empty(); // Vide les items existants
+
+		// Pré-remplir les actions
+		const formattedActions = (permission.actions && permission.actions.length > 0) 
+			? permission.actions.map(action => ({
+				'id': action.id || '',
+				'libelle': action.libelle || ''
+			}))
+			: {'libelle': ''};
+		$repeater.setList(formattedActions);
+	});
 
     {% for type, messages in app.flashes %}
         {% for message in messages %}

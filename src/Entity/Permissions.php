@@ -6,7 +6,7 @@ use App\Mapping\EntityBase;
 use App\Repository\PermissionsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PermissionsRepository::class)]
@@ -78,8 +78,9 @@ class Permissions extends EntityBase
     public function generateSlug(): void
     {
         if ($this->libelle) {
-            // Slugify en français avec un slugger injecté plus tard dans un service ou EventSubscriber
-            $this->slug = strtolower(trim(preg_replace('/[^a-z0-9]+/', '-', $this->libelle), '-'));
+            $slugger = new AsciiSlugger('fr'); // Support du français
+            $slug = $slugger->slug($this->libelle)->lower();
+            $this->slug = $slug;
         }
     }
 
