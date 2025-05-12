@@ -3,11 +3,12 @@
 namespace App\Entity;
 
 use App\Mapping\EntityBase;
-use App\Repository\RolesRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\RolesRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[ORM\Entity(repositoryClass: RolesRepository::class)]
 class Roles extends EntityBase
@@ -35,7 +36,7 @@ class Roles extends EntityBase
     /**
      * @var Collection<int, Autorisations>
      */
-    #[ORM\OneToMany(targetEntity: Autorisations::class, mappedBy: 'role', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Autorisations::class, mappedBy: 'role', cascade: ['persist'], orphanRemoval: true)]
     private Collection $autorisations;
 
     #[ORM\Column(nullable: true)]
@@ -74,6 +75,17 @@ class Roles extends EntityBase
         $this->slug = $slug;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function generateSlug(): void
+    {
+        if ($this->libelle) {
+            $slugger = new AsciiSlugger('fr'); // Support du français
+            $slug = $slugger->slug($this->libelle)->lower();
+            $this->slug = $slug;
+        }
     }
 
     /**

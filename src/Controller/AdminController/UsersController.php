@@ -29,96 +29,191 @@ final class UsersController extends AbstractController
     private $fileUploader;
     private $entityManager;
     private $slugger;
-    private $mailer;
     private $resetPasswordHelper;
 
-    public function __construct(FileUploader $fileUploader, EntityManagerInterface $entityManager, SluggerInterface $slugger, MailerInterface $mailer, ResetPasswordHelperInterface $resetPasswordHelper)
+    public function __construct(FileUploader $fileUploader, EntityManagerInterface $entityManager, SluggerInterface $slugger, ResetPasswordHelperInterface $resetPasswordHelper)
     {
         $this->fileUploader = $fileUploader;
         $this->entityManager = $entityManager;
         $this->slugger = $slugger;
-        $this->mailer = $mailer;
         $this->resetPasswordHelper = $resetPasswordHelper;
     }
 
     #[Route('/', name: 'liste_users')]
-    public function list(Request $request, UsersRepository $usersRepository, RolesRepository $RolesRepository, SessionInterface $session): Response
+    public function list(Request $request, UsersRepository $usersRepository, RolesRepository $rolesRepository, SessionInterface $session, MailerInterface $mailer): Response
     {
+        // Définition du menu actif
         $session->set('menu', 'users_manage');
         $session->set('subMenu', 'users');
-        
+
+        // Création du formulaire d'ajout d'utilisateur
         $user = new Users();
         $form = $this->createForm(UsersType::class, $user, ['form_type' => 'add']);
         $form->handleRequest($request);
 
+        // Soumission et validation du formulaire
         if ($form->isSubmitted() && $form->isValid()) {
-            // Verify if email is already exist
             $email = $form->get('email')->getData();
-            if ($isExist = $usersRepository->findOneByEmail($email)) {
-                if ($isExist->getDeletedAt()) $this->addFlash('error', 'L\'adresse email existe dans la corbeille. Veuillez vous rendre dans la corbeille pour la supprimer puis réessayer.');
-                else $this->addFlash('error', 'L\'adresse email existe déjà. Réessayez avec une autre.');
+            $existingUser = $usersRepository->findOneByEmail($email);
+
+            if ($existingUser) {
+                $this->addFlash('error', $existingUser->getDeletedAt()
+                    ? 'Email existant dans la corbeille. Supprimez-le avant de continuer.'
+                    : 'Email déjà utilisé. Veuillez en choisir un autre.'
+                );
+            } else {
+                // Gestion de l'upload de l'avatar
+                if ($file = $form->get('avatar')->getData()) {
+                    $data = $this->fileUploader->upload($file);
+                    $fileEntity = (new Files())
+                        ->setFilename($data['filename'])
+                        ->setType($data['type'])
+                        ->setAlt('Avatar de ' . $user->getNomComplet());
+                    $user->setAvatar($fileEntity);
+                    $this->entityManager->persist($fileEntity);
+                }
+
+                // Timestamps et Userstamps
+                $user->updatedTimestamps();
+                $user->updatedUserstamps($this->getUser());
+
+                $this->entityManager->persist($user);
+                $this->entityManager->flush();
+
+                // Envoi de l'e-mail d'activation
+                $token = $this->resetPasswordHelper->generateResetToken($user);
+                $resetLink = $this->generateUrl('app_reset_password', ['token' => $token->getToken()], UrlGeneratorInterface::ABSOLUTE_URL);
                 
-                return $this->redirectToRoute('users_list', [], Response::HTTP_SEE_OTHER);
+                $emailMessage = (new Email())
+                    ->from('hello@moussa-fofana.com')
+                    ->to($user->getEmail())
+                    ->subject('Bienvenue')
+                    ->html($this->renderView('admin/users/_email_userActivation.html.twig', [
+                        'user' => $user,
+                        'resetLink' => $resetLink,
+                    ]));
+                $mailer->send($emailMessage);
+
+                $this->addFlash('success', 'Utilisateur ajouté. Un email d’activation lui a été envoyé.');
+                return $this->redirectToRoute('liste_users');
             }
-            /** @var UploadedFile $profileFile */
-            $profileFile = $form->get('avatar')->getData();
-            // $token = bin2hex(random_bytes(32));
-            if ($profileFile) {
-                // dd($profileFile);
-                // Utilisez le service pour uploader le fichier
-                $file = $this->fileUploader->upload($profileFile); // 'images' est ici le sous-dossier de stockage
-
-                // Créez une nouvelle instance de l'entité Files
-                $fileEntity = new Files();
-                $fileEntity->setFilename($file['filename']);
-                $fileEntity->setType($file['type']);
-                $fileEntity->setAlt('Avatar de ' . $user->getNomComplet());
-
-                // Associez le fichier à l'utilisateur
-                $user->setAvatar($fileEntity);
-
-                // Persistez l'entité Files dans la base de données
-                $this->entityManager->persist($fileEntity);
-            }
-            $user->updatedTimestamps();
-            $user->updatedUserstamps($this->getUser());
-
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
-
-            // Envoyer l'email de Bienvenue
-            $activateToken = $this->resetPasswordHelper->generateResetToken($user);
-            $this->sendPasswordResetEmail($user, $activateToken->getToken());
-
-            $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès. Un Email de confirmation lui a été envoyé sur son adresse pour confirmaer son compte.');
-            return $this->redirectToRoute('users_list', [], Response::HTTP_SEE_OTHER);
         }
-
+        // Affichage initial ou avec erreurs
         return $this->render('admin/users/liste.html.twig', [
             'users' => $usersRepository->findAll(),
-            'roles' => $RolesRepository->findAll(),
-            // 'user' => $user,
+            'roles' => $rolesRepository->findAll(),
             'new_user' => $form,
         ]);
     }
-    
-    private function sendPasswordResetEmail(Users $user, string $token)
-    {
-        try {
-            $email = (new Email())
-                ->from('no-reply@pricing-tool.com', 'Pricing Tool')
-                ->to($user->getEmail())
-                ->subject('Bienvenue sur votre plateforme !')
-                ->html($this->renderView('users/_email_activate.html.twig', [
-                    'user' => $user,
-                    'resetLink' => $this->generateUrl('app_reset_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL)
-                ]));
 
-            $this->mailer->send($email);
-        } catch (\Exception $e) {
-            // Optionnellement, renvoyer une exception ou retourner une réponse spécifique
-            throw new \RuntimeException('L\'envoi de l\'email a échoué, veuillez réessayer plus tard. Erreur : '. $e->getMessage());
+    #[Route('/{user}/details', name: 'details_user', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Users $user, EntityManagerInterface $entityManager, SessionInterface $session, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        $session->set('profilNav', 'edit');
+        $form_edit = $this->createForm(UsersType::class, $user, ['form_type' => 'edit']);
+        $form_change_email = $this->createForm(UsersType::class, $user, ['form_type' => 'change_email']);
+        $form_reset_password = $this->createForm(UsersType::class, new Users(), ['form_type' => 'reset_password']);
+        // $form_deactivate = $this->createForm(UsersType::class, $user, ['form_type' => 'deactivate_account']);
+        
+        if (isset($request->get('users')['nomComplet'])) $form_edit->handleRequest($request);
+        if (isset($request->get('users')['email'])) $form_change_email->handleRequest($request);
+        if (isset($request->get('users')['password'])) $form_reset_password->handleRequest($request);
+        // if (isset($request->get('users')['activated'])) $form_deactivate->handleRequest($request);
+
+        if ($form_edit->isSubmitted() && $form_edit->isValid()) {
+            $user->updatedTimestamps();
+            $user->updatedUserstamps($this->getUser());
+            $entityManager->flush();
+            
+            $this->addFlash('success', 'Les informations ont été mises à jour avec succès.');
+            return $this->redirectToRoute('users_edit', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
+        if ($form_change_email->isSubmitted() && $form_change_email->isValid()) {
+            // Vérification du mot de passe actuel
+            $currentPassword = $form_change_email->get('currentPassword')->getData();
+            if (!empty($currentPassword)) {
+                if (!$passwordHasher->isPasswordValid($user, $currentPassword)) {
+                    // Mot de passe incorrect
+                    $this->addFlash('error', 'Le mot de passe actuel n\'est correct. Veuillez réessayer.');
+                } else {
+                    // Si un nouvel email est saisi, on le met à jour
+                    $newEmail = $form_change_email->get('email')->getData();
+                    if (!empty($newEmail)) {
+                        $user->setEmail($newEmail)->updatedTimestamps();
+                        $user->updatedUserstamps($this->getUser());
+                    }
+                    // Enregistrement des changements
+                    $entityManager->flush();
+
+                    $this->addFlash('success', 'L\'adresse email a été mis à jour avec succès.');
+                }
+            }
+            return $this->redirectToRoute('users_edit', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
+        }
+        if ($form_reset_password->isSubmitted() && $form_reset_password->isValid()) {
+            // Vérification du mot de passe actuel
+            $currentPassword = $form_reset_password->get('currentPassword')->getData();
+            if (!empty($currentPassword)) {
+                if (!$passwordHasher->isPasswordValid($user, $currentPassword)) {
+                    // Mot de passe incorrect
+                    $this->addFlash('error', 'Le mot de passe actuel n\'est pas correct. Veuillez réessayer.');
+                } else {
+                    // Si un nouveau mot de passe est saisi, on le met à jour
+                    $newPassword = $form_reset_password->get('password')->getData();
+                    if (!empty($newPassword)) {
+                        $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
+                        $user->setPassword($hashedPassword)->updatedTimestamps();
+                        $user->updatedUserstamps($this->getUser());
+                    }
+                    // Enregistrement des changements
+                    $entityManager->flush();
+
+                    $this->addFlash('success', 'Le mot de passe a été mis à jour avec succès.');
+                }
+            }
+            return $this->redirectToRoute('users_edit', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
+        }
+        // if ($form_deactivate->isSubmitted() && $form_deactivate->isValid()) {
+        if ($request->isMethod('POST')) {
+            $user->setActivated(false)->updatedTimestamps();
+            $user->updatedUserstamps($this->getUser());
+            $entityManager->flush();
+            
+            $this->addFlash('success', 'L\utilisateur a été désactivé.');
+            return $this->redirectToRoute('users_edit', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('users/profil_edit.html.twig', [
+            'user' => $user,
+            'form_edit' => $form_edit,
+            'form_change_email' => $form_change_email,
+            'form_reset_password' => $form_reset_password,
+            // 'form_deactivate' => $form_deactivate,
+        ]);
     }
 
+    #[Route('/{user}/delete', name: 'delete_user', methods: ['POST'])]
+    public function delete(Request $request, Users $user, EntityManagerInterface $em): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))) {
+            $user->remove($this->getUser());
+            $em->flush();
+        }
+        return $this->redirectToRoute('liste_users', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/delete-users-selected', name: 'delete_users_selected', methods: ['POST'])]
+    public function deleteUsersSelected(Request $request, EntityManagerInterface $em, UsersRepository $usersRepository): Response
+    {
+        // Récupérer les données JSON de la requête
+        $data = json_decode($request->getContent(), true);
+
+        if ($request->isXmlHttpRequest()) {
+            foreach ($data['usersDeleted'] as $id) {
+                if ($user = $usersRepository->find($id)) $user->remove($this->getUser());
+                $em->flush();
+            }
+        }
+        return new JsonResponse(true, 200);
+    }
 }

@@ -16,16 +16,17 @@ class AutorisationsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('permission', EntityType::class, [
-                'class' => Permissions::class,
-                'choice_label' => 'libelle',
-                'label' => 'Permission',
-            ])
+            // ->add('permission', EntityType::class, [
+            //     'class' => Permissions::class,
+            //     'choice_label' => 'libelle',
+            //     'label' => false,
+            // ])
             ->add('actions', CollectionType::class, [
                 'entry_type' => ActionsAutorisationType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
+                'prototype' => true,
                 'label' => false,
             ]);
         ;

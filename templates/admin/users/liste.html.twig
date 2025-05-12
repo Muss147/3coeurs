@@ -310,7 +310,7 @@
 									Sélectioné(s)
 								</div>
 
-								<button type="button" class="btn btn-danger" data-kt-user-table-select="delete_selected">
+								<button type="button" class="btn btn-danger" data-kt-user-table-select="delete_selected" data-deleted-root="{{path('delete_users_selected')}}">
 									Supprimer la sélection
 								</button>
 							</div>
@@ -458,19 +458,19 @@
 														<!--begin::Image placeholder-->
 														<style>
 															.image-input-placeholder {
-																background-image: url("{{asset('assets/media/svg/files/blank-image.svg')}}");
+																background-image: url("{{asset('assets/media/svg/avatars/blank.svg')}}");
 															}
 
 															[data-bs-theme="dark"] .image-input-placeholder {
-																background-image: url("{{asset('assets/media/svg/files/blank-image-dark.svg')}}");
+																background-image: url("{{asset('assets/media/svg/avatars/blank-dark.svg')}}");
 															}
 														</style>
 														<!--end::Image placeholder-->
 														<!--begin::Image input-->
 														<div
-															class="image-input image-input-outline image-input-placeholder" data-kt-image-input="true">
+															class="image-input image-input-outline image-input-placeholder image-input-empty" data-kt-image-input="true">
 															<!--begin::Preview existing avatar-->
-															<div class="image-input-wrapper w-125px h-125px" style="background-image: url({{asset('assets/media/avatars/300-6.jpg')}});"></div>
+															<div class="image-input-wrapper w-125px h-125px"></div>
 															<!--end::Preview existing avatar-->
 
 															<!--begin::Label-->
@@ -480,9 +480,8 @@
 																	<span class="path2"></span>
 																</i>
 																<!--begin::Inputs-->
-																<input type="file" name="avatar" accept=".png, .jpg, .jpeg"/>
-																<input
-																type="hidden" name="avatar_remove"/>
+																{{ form_row(new_user.avatar) }}
+																<input type="hidden" name="avatar_remove"/>
 															<!--end::Inputs-->
 															</label>
 															<!--end::Label-->
@@ -562,18 +561,20 @@
 														<!--end::Label-->
 
 														<!--begin::Roles-->
+														{% for index, role in new_user.role %}
 														<!--begin::Input row-->
 														<div
 															class="d-flex fv-row"> <!--begin::Radio-->
 															<div
 																class="form-check form-check-custom form-check-solid">
 																<!--begin::Input-->
-																<input class="form-check-input me-3" name="user_role" type="radio" value="0" id="kt_modal_update_role_option_0" checked='checked'/>
+																{{ form_widget(role, {'attr': {'class': 'form-check-input me-3'}}) }}
 																<!--end::Input-->
 
 																<!--begin::Label-->
-																	<label class="form-check-label" for="kt_modal_update_role_option_0"> <div class="fw-bold text-gray-800">Administrator</div>
-																	<div class="text-gray-600">Best for business owners and company administrators</div>
+																<label class="form-check-label" for="{{ role.vars.id }}"> 
+																	<div class="fw-bold text-gray-800">{{ role.vars.label }}</div>
+																	<div class="text-gray-600">{{role.vars.attr['data-description']|raw}}</div>
 																</label>
 																<!--end::Label-->
 															</div>
@@ -581,90 +582,10 @@
 														</div>
 														<!--end::Input row-->
 
+														{% if not loop.last %}
 														<div class='separator separator-dashed my-5'></div>
-														<!--begin::Input row-->
-														<div
-															class="d-flex fv-row">
-															<!--begin::Radio-->
-															<div
-																class="form-check form-check-custom form-check-solid">
-																<!--begin::Input-->
-																<input class="form-check-input me-3" name="user_role" type="radio" value="1" id="kt_modal_update_role_option_1"/>
-																<!--end::Input-->
-
-																<!--begin::Label-->
-																	<label class="form-check-label" for="kt_modal_update_role_option_1"> <div class="fw-bold text-gray-800">Developer</div>
-																	<div class="text-gray-600">Best for developers or people primarily using the API</div>
-																</label>
-																<!--end::Label-->
-															</div>
-															<!--end::Radio-->
-														</div>
-														<!--end::Input row-->
-
-														<div class='separator separator-dashed my-5'></div>
-														<!--begin::Input row-->
-														<div
-															class="d-flex fv-row">
-															<!--begin::Radio-->
-															<div
-																class="form-check form-check-custom form-check-solid">
-																<!--begin::Input-->
-																<input class="form-check-input me-3" name="user_role" type="radio" value="2" id="kt_modal_update_role_option_2"/>
-																<!--end::Input-->
-
-																<!--begin::Label-->
-																	<label class="form-check-label" for="kt_modal_update_role_option_2"> <div class="fw-bold text-gray-800">Analyst</div>
-																	<div class="text-gray-600">Best for people who need full access to analytics data, but don't need to update business settings</div>
-																</label>
-																<!--end::Label-->
-															</div>
-															<!--end::Radio-->
-														</div>
-														<!--end::Input row-->
-
-														<div class='separator separator-dashed my-5'></div>
-														<!--begin::Input row-->
-														<div
-															class="d-flex fv-row">
-															<!--begin::Radio-->
-															<div
-																class="form-check form-check-custom form-check-solid">
-																<!--begin::Input-->
-																<input class="form-check-input me-3" name="user_role" type="radio" value="3" id="kt_modal_update_role_option_3"/>
-																<!--end::Input-->
-
-																<!--begin::Label-->
-																	<label class="form-check-label" for="kt_modal_update_role_option_3"> <div class="fw-bold text-gray-800">Support</div>
-																	<div class="text-gray-600">Best for employees who regularly refund payments and respond to disputes</div>
-																</label>
-																<!--end::Label-->
-															</div>
-															<!--end::Radio-->
-														</div>
-														<!--end::Input row-->
-
-														<div class='separator separator-dashed my-5'></div>
-														<!--begin::Input row-->
-														<div
-															class="d-flex fv-row">
-															<!--begin::Radio-->
-															<div
-																class="form-check form-check-custom form-check-solid">
-																<!--begin::Input-->
-																<input class="form-check-input me-3" name="user_role" type="radio" value="4" id="kt_modal_update_role_option_4"/>
-																<!--end::Input-->
-
-																<!--begin::Label-->
-																	<label class="form-check-label" for="kt_modal_update_role_option_4"> <div class="fw-bold text-gray-800">Trial</div>
-																	<div class="text-gray-600">Best for people who need to preview content data, but don't need to make any updates</div>
-																</label>
-																<!--end::Label-->
-															</div>
-															<!--end::Radio-->
-														</div>
-														<!--end::Input row-->
-
+														{% endif %}
+														{% endfor %}
 														<!--end::Roles-->
 													</div>
 													<!--end::Input group-->
@@ -716,11 +637,10 @@
 											<input class="form-check-input" type="checkbox" data-kt-check="true" data-kt-check-target="#kt_table_users .form-check-input" value="1"/>
 										</div>
 									</th>
-									<th class="min-w-125px">Utilisateur</th>
+									<th class="min-w-250px">Utilisateur</th>
 									<th class="min-w-125px">Rôle</th>
-									<th class="min-w-125px">Dernière connexion</th>
-									<th class="min-w-125px">Statut
-									</th>
+									<th class="max-w-100px">Dernière connexion</th>
+									<th class="max-w-100px">Statut</th>
 									<th class="min-w-125px">Date</th>
 									<th class="text-end min-w-100px">Actions</th>
 								</tr>
@@ -737,14 +657,14 @@
 										class="d-flex align-items-center">
 										<!--begin:: Avatar -->
 										<div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-											<a href="">
+											<a href="{{ path('details_user', {'user': user.id}) }}">
                                                 {% if user.avatar %}
 												<div class="symbol-label">
-													<img src="/metronic8/demo10/assets/media/avatars/300-6.jpg" alt="{{user.nomComplet}}" class="w-100"/>
+													<img src="{{asset(user.avatar.filename)}}" alt="{{user.nomComplet}}" class="w-100"/>
 												</div>
                                                 {% else %}
                                                 <div class="symbol-label fs-3 bg-light-danger text-danger">
-													M
+													{{user.nomComplet|slice(0,1)|upper}}
 												</div>
                                                 {% endif %}
 											</a>
@@ -752,7 +672,7 @@
 										<!--end::Avatar-->
 										<!--begin::User details-->
 										<div class="d-flex flex-column">
-											<a href="" class="text-gray-800 text-hover-primary mb-1">{{user.nomComplet}}</a>
+											<a href="{{ path('details_user', {'user': user.id}) }}" class="text-gray-800 text-hover-primary mb-1">{{user.nomComplet}}</a>
 											<span>{{user.email}}</span>
 										</div>
 										<!--begin::User details-->
@@ -761,11 +681,14 @@
 										{{user.role.libelle}}
 									</td>
 									<td>
-										<div class="badge badge-light fw-bold">Yesterday</div>
+										{% if user.lastLogin %}<div class="badge badge-light fw-bold">{{user.lastLogin|time_ago}}</div>{% endif %}
 									</td>
-									<td></td>
 									<td>
-										15 Apr 2025, 2:40 pm
+										{% if user.activated %}<div class="badge badge-light-success fw-bold">Actif</div>
+										{% else %}<div class="badge badge-light-danger fw-bold">Bloqué</div>{% endif %}
+									</td>
+									<td>
+										{{ user.createdAt ? user.createdAt|date('d-m-Y H:i:s') : '' }}
 									</td>
 									<td class="text-end">
 										<a href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
@@ -777,18 +700,29 @@
 											class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4" data-kt-menu="true">
 											<!--begin::Menu item-->
 											<div class="menu-item px-3">
-												<a href="" class="menu-link px-3">
+												<a href="{{ path('details_user', {'user': user.id}) }}" class="menu-link px-3">
 													Modifier
 												</a>
 											</div>
 											<!--end::Menu item-->
 
+											{% if not user.isActivated %}
 											<!--begin::Menu item-->
 											<div class="menu-item px-3">
+												<a href="{{ path('details_user', {'user': user.id}) }}" class="menu-link px-3">
+													Activation...
+												</a>
+											</div>
+											<!--end::Menu item-->
+											{% endif %}
+
+											<!--begin::Menu item-->
+											<form class="menu-item px-3" method="post" action="{{ path('delete_user', {'user': user.id}) }}">
+												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
 												<a href="#" class="menu-link px-3" data-kt-users-table-filter="delete_row">
 													Supprimer
 												</a>
-											</div>
+											</form>
 											<!--end::Menu item-->
 										</div>
 										<!--end::Menu-->
@@ -815,4 +749,20 @@
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/table.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/export-users.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/add.js')}}"></script>
+
+<script type="text/javascript">
+	{% for type, messages in app.flashes %}
+		{% for message in messages %}
+		Swal.fire({
+			html: `{{message|raw}}`,
+			icon: "{{type}}",
+			buttonsStyling: false,
+			confirmButtonText: "Ok, compris !",
+			customClass: {
+				confirmButton: "btn btn-primary"
+			}
+		});
+		{% endfor %}
+	{% endfor %}
+</script>
 {% endblock %}

@@ -22,7 +22,7 @@ class ActionsAutorisation
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Actions $libelle = null;
+    private ?Actions $action = null;
 
     public function getId(): ?int
     {
@@ -53,14 +53,14 @@ class ActionsAutorisation
         return $this;
     }
 
-    public function getLibelle(): ?Actions
+    public function getAction(): ?Actions
     {
-        return $this->libelle;
+        return $this->action;
     }
 
-    public function setLibelle(?Actions $libelle): static
+    public function setAction(?Actions $action): static
     {
-        $this->libelle = $libelle;
+        $this->action = $action;
 
         return $this;
     }

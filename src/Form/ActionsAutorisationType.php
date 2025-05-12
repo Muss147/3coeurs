@@ -16,14 +16,15 @@ class ActionsAutorisationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('libelle', EntityType::class, [
-                'class' => Actions::class,
-                'choice_label' => 'libelle',
-                'label' => false,
-            ])
+            // ->add('action', EntityType::class, [
+            //     'class' => Actions::class,
+            //     'choice_label' => 'libelle',
+            //     'label' => false,
+            // ])
             ->add('checked', CheckboxType::class, [
                 'required' => false,
                 'label' => false,
+                'false_values' => ['0'], // interprète bien "0" comme false
             ]);
         ;
     }

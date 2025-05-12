@@ -29,7 +29,7 @@ class Permissions extends EntityBase
     /**
      * @var Collection<int, Autorisations>
      */
-    #[ORM\OneToMany(targetEntity: Autorisations::class, mappedBy: 'permission', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Autorisations::class, mappedBy: 'permission', cascade: ['persist'], orphanRemoval: true)]
     private Collection $autorisations;
 
     /**

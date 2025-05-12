@@ -15,7 +15,7 @@ class TestMailController extends AbstractController
     {
         $email = (new Email())
             ->from('hello@moussa-fofana.com')
-            ->to('mfofana@aguimaagency.com')
+            ->to('hello@moussa-fofana.com')
             ->subject('Test d’envoi d’e-mail')
             ->text('Ceci est un test depuis Symfony.');
 

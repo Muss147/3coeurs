@@ -27,7 +27,7 @@ class Autorisations
     /**
      * @var Collection<int, ActionsAutorisation>
      */
-    #[ORM\OneToMany(targetEntity: ActionsAutorisation::class, mappedBy: 'autorisation', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: ActionsAutorisation::class, mappedBy: 'autorisation', cascade: ['persist'], orphanRemoval: true)]
     private Collection $actions;
 
     public function __construct()

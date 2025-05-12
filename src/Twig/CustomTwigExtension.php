@@ -1,5 +1,5 @@
-<?php
-// src/Twig/CustomTwigExtension.php
+<?php // src/Twig/CustomTwigExtension.php
+
 namespace App\Twig;
 
 use DateTimeInterface;

@@ -28,7 +28,7 @@ class RolesType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-                'label' => 'Permissions et actions',
+                'label' => false,
             ]);
         ;
     }
